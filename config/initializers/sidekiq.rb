@@ -1,11 +1,18 @@
 # frozen_string_literal: true
-host = ENV.fetch('REDIS_HOST') { 'localhost' }
-port = ENV.fetch('REDIS_PORT') { 6379 }
-password = ENV.fetch('REDIS_PASSWORD') { false }
-db = ENV.fetch('REDIS_DB') { 0 }
+redis_params = if ENV['REDIS_SOCKET']
+  { 
+    url: "unix:#{ENV['REDIS_SOCKET']}" 
+  }
+else
+  { 
+    host: ENV.fetch('REDIS_HOST') { 'localhost' }, 
+    port: ENV.fetch('REDIS_PORT') { '6379' },
+    password: ENV.fetch('REDIS_PASSWORD') { false }
+  }
+end
+redis_params[:db] = ENV.fetch('REDIS_DB') { 0 }
 
 namespace = ENV.fetch('REDIS_NAMESPACE') { nil }
-redis_params = { host: host, port: port, db: db, password: password }
 
 if namespace
   redis_params [:namespace] = namespace

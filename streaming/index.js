@@ -90,8 +90,9 @@ if (cluster.isMaster) {
   const redisNamespace = process.env.REDIS_NAMESPACE || null
 
   const redisParams = {
-    host:     process.env.REDIS_HOST     || '127.0.0.1',
-    port:     process.env.REDIS_PORT     || 6379,
+    host:     process.env.REDIS_HOST     || (process.env.REDIS_SOCKET ? null : '127.0.0.1'),
+    port:     process.env.REDIS_PORT     || (process.env.REDIS_SOCKET ? null : 6379),
+    path:     process.env.REDIS_SOCKET,
     password: process.env.REDIS_PASSWORD,
   }
 

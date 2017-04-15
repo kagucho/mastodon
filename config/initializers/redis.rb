@@ -1,12 +1,19 @@
 # frozen_string_literal: true
 
-redis_params = {
-  password: ENV.fetch('REDIS_PASSWORD') { false },
-  host:     ENV.fetch('REDIS_HOST') { 'localhost' },
-  port:     ENV.fetch('REDIS_PORT') { 6379 },
-  db:       ENV.fetch('REDIS_DB') { 0 },
-  driver:   :hiredis
-}
+redis_params = if ENV['REDIS_SOCKET']
+  { path: ENV['REDIS_SOCKET'] }
+else
+  { 
+    password: ENV.fetch('REDIS_PASSWORD') { false },
+    host: ENV.fetch('REDIS_HOST') { 'localhost' }, 
+    port: ENV.fetch('REDIS_PORT') { 6379 },
+  }
+end
+
+redis_params.merge!({
+  db:     ENV.fetch('REDIS_DB') { 0 },
+  driver: :hiredis,
+})
 
 redis_connection = Redis.new(redis_params)
 
