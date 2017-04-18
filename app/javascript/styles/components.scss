@@ -1248,7 +1248,8 @@
   position: relative;
 }
 
-@media screen and (min-width: 360px) {
+// min-width corresponds to signle-column + nav layout breakpoint
+@media screen and (min-width: 1024px) {
   .columns-area {
     padding: 10px;
   }
@@ -1304,7 +1305,8 @@
   }
 }
 
-@media screen and (min-width: 360px) {
+// min-width corresponds to signle-column + nav layout breakpoint
+@media screen and (min-width: 1024px) {
   .tabs-bar {
     margin: 10px;
     margin-bottom: 0;
