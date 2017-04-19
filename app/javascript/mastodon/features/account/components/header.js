@@ -110,6 +110,8 @@ export default class Header extends ImmutablePureComponent {
           </div>
         );
       } else if (!account.getIn(['relationship', 'blocking'])) {
+        // Put action button at the left side to prevent from erroneously
+        // clicking the back button on the right side.
         actionBtn = (
           <div className='account--action-button'>
             <IconButton size={26} icon={account.getIn(['relationship', 'following']) ? 'user-times' : 'user-plus'} active={account.getIn(['relationship', 'following'])} title={intl.formatMessage(account.getIn(['relationship', 'following']) ? messages.unfollow : messages.follow)} onClick={this.props.onFollow} />
