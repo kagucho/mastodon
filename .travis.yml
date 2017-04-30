@@ -36,6 +36,7 @@ services:
 bundler_args: --without development production --retry=3 --jobs=3
 
 install:
+  - eval "$(gimme 1.7)"
   - nvm install
   - npm install -g yarn
   - bundle install
@@ -46,5 +47,6 @@ before_script:
 
 script:
   - bundle exec rspec
+  - go test ./mastodon-gostreaming
   - npm test
   - i18n-tasks unused
