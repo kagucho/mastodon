@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 # == Schema Information
 #
-# Table name: mutes
+# Table name: account_relations
 #
 #  account_id        :integer          not null
 #  target_account_id :integer          not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  type              :enum             not null
-#  id                :integer          not null, primary key
 #
 
-class Mute < ApplicationRecord
+class AccountRelation < ApplicationRecord
   include Paginable
 
   belongs_to :account, required: true
@@ -19,14 +18,14 @@ class Mute < ApplicationRecord
 
   validates :account_id, uniqueness: { scope: :target_account_id }
 
-  after_create  :remove_blocking_cache
-  after_destroy :remove_blocking_cache
+  after_create  :remove_account_relation_cache
+  after_destroy :remove_account_relation_cache
 
-  enum type: {block: 'block', mute: 'mute'}
+  enum type: { block: 'block', mute: 'mute' }
 
   private
 
-  def remove_blocking_cache
+  def remove_account_relation_cache
     Rails.cache.delete("exclude_account_ids_for:#{account_id}")
   end
 end

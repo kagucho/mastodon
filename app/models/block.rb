@@ -3,11 +3,12 @@
 #
 # Table name: blocks
 #
-#  id                :integer          not null, primary key
 #  account_id        :integer          not null
 #  target_account_id :integer          not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  type              :enum             not null
+#  id                :integer          not null, primary key
 #
 
 class Block < ApplicationRecord
@@ -20,6 +21,8 @@ class Block < ApplicationRecord
 
   after_create  :remove_blocking_cache
   after_destroy :remove_blocking_cache
+
+  enum type: {block: 'block', mute: 'mute'}
 
   private
 

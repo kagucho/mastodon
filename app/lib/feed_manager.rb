@@ -96,12 +96,12 @@ class FeedManager
     check_for_mutes = [status.account_id]
     check_for_mutes.concat([status.reblog.account_id]) if status.reblog?
 
-    return true if Mute.where(account_id: receiver_id, target_account_id: check_for_mutes).any?
+    return true if AccountRelation.where(account_id: receiver_id, target_account_id: check_for_mutes, type: :mute).any?
 
     check_for_blocks = status.mentions.map(&:account_id)
     check_for_blocks.concat([status.reblog.account_id]) if status.reblog?
 
-    return true if Block.where(account_id: receiver_id, target_account_id: check_for_blocks).any?
+    return true if AccountRelation.where(account_id: receiver_id, target_account_id: check_for_blocks, type: :block).any?
 
     if status.reply? && !status.in_reply_to_account_id.nil?                                                              # Filter out if it's a reply
       should_filter   = !Follow.where(account_id: receiver_id, target_account_id: status.in_reply_to_account_id).exists? # and I'm not following the person it's a reply to
@@ -109,7 +109,7 @@ class FeedManager
       should_filter &&= !(status.account_id == status.in_reply_to_account_id)                                            # and it's not a self-reply
       return should_filter
     elsif status.reblog?                                                                                                 # Filter out a reblog
-      return Block.where(account_id: status.reblog.account_id, target_account_id: receiver_id).exists?                   # or if the author of the reblogged status is blocking me
+      return AccountRelation.where(account_id: status.reblog.account_id, target_account_id: receiver_id, type: :block).exists?                   # or if the author of the reblogged status is blocking me
     end
 
     false
@@ -121,7 +121,7 @@ class FeedManager
     check_for_blocks.concat([status.in_reply_to_account]) if status.reply? && !status.in_reply_to_account_id.nil?
 
     should_filter   = receiver_id == status.account_id                                                                                   # Filter if I'm mentioning myself
-    should_filter ||= Block.where(account_id: receiver_id, target_account_id: check_for_blocks).any?                                     # or it's from someone I blocked, in reply to someone I blocked, or mentioning someone I blocked
+    should_filter ||= AccountRelation.where(account_id: receiver_id, target_account_id: check_for_blocks, type: :block).any?                                     # or it's from someone I blocked, in reply to someone I blocked, or mentioning someone I blocked
     should_filter ||= (status.account.silenced? && !Follow.where(account_id: receiver_id, target_account_id: status.account_id).exists?) # of if the account is silenced and I'm not following them
 
     should_filter

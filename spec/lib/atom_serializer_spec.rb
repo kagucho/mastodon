@@ -152,7 +152,7 @@ RSpec.describe AtomSerializer do
 
   describe '#block_salmon' do
     let(:xml) do
-      block = Fabricate(:block, account: author, target_account: receiver)
+      block = Fabricate(:account_relation, account: author, target_account: receiver, type: :block)
       xml   = AtomSerializer.render(AtomSerializer.new.block_salmon(block))
       block.destroy
       xml
@@ -171,7 +171,7 @@ RSpec.describe AtomSerializer do
 
   describe '#unblock_salmon' do
     let(:xml) do
-      block = Fabricate(:block, account: author, target_account: receiver)
+      block = Fabricate(:account_relation, account: author, target_account: receiver, type: :block)
       block.destroy
       xml = AtomSerializer.render(AtomSerializer.new.unblock_salmon(block))
       author.block!(receiver)

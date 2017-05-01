@@ -226,7 +226,7 @@ RSpec.describe Status, type: :model do
 
       it 'excludes statuses from accounts blocked by the account' do
         blocked = Fabricate(:account)
-        Fabricate(:block, account: @account, target_account: blocked)
+        Fabricate(:account_relation, account: @account, target_account: blocked, type: :block)
         blocked_status = Fabricate(:status, account: blocked)
 
         results = Status.as_public_timeline(@account)
@@ -235,7 +235,7 @@ RSpec.describe Status, type: :model do
 
       it 'excludes statuses from accounts who have blocked the account' do
         blocked = Fabricate(:account)
-        Fabricate(:block, account: blocked, target_account: @account)
+        Fabricate(:account_relation, account: blocked, target_account: @account, type: :block)
         blocked_status = Fabricate(:status, account: blocked)
 
         results = Status.as_public_timeline(@account)
@@ -244,7 +244,7 @@ RSpec.describe Status, type: :model do
 
       it 'excludes statuses from accounts muted by the account' do
         muted = Fabricate(:account)
-        Fabricate(:mute, account: @account, target_account: muted)
+        Fabricate(:account_relation, account: @account, target_account: muted, type: :mute)
         muted_status = Fabricate(:status, account: muted)
 
         results = Status.as_public_timeline(@account)

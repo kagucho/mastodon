@@ -76,14 +76,14 @@ class Account < ApplicationRecord
   has_many :followers, -> { order('follows.id desc') }, through: :passive_relationships, source: :account
 
   # Block relationships
-  has_many :block_relationships, class_name: 'Block', foreign_key: 'account_id', dependent: :destroy
-  has_many :blocking, -> { order('blocks.id desc') }, through: :block_relationships, source: :target_account
-  has_many :blocked_by_relationships, class_name: 'Block', foreign_key: :target_account_id, dependent: :destroy
-  has_many :blocked_by, -> { order('blocks.id desc') }, through: :blocked_by_relationships, source: :account
+  has_many :block_relationships, -> { where(type: :block) }, class_name: 'AccountRelation', foreign_key: 'account_id', dependent: :destroy
+  has_many :blocking, -> { order('account_relations.id desc') }, through: :block_relationships, source: :target_account
+  has_many :blocked_by_relationships, class_name: 'AccountRelation', foreign_key: :target_account_id, dependent: :destroy
+  has_many :blocked_by, -> { order('account_relations.id desc') }, through: :blocked_by_relationships, source: :account
 
   # Mute relationships
-  has_many :mute_relationships, class_name: 'Mute', foreign_key: 'account_id', dependent: :destroy
-  has_many :muting, -> { order('mutes.id desc') }, through: :mute_relationships, source: :target_account
+  has_many :mute_relationships, -> { where(type: :mute) }, class_name: 'AccountRelation', foreign_key: 'account_id', dependent: :destroy
+  has_many :muting, -> { order('account_relations.id desc') }, through: :mute_relationships, source: :target_account
 
   # Media
   has_many :media_attachments, dependent: :destroy
@@ -309,11 +309,11 @@ class Account < ApplicationRecord
     end
 
     def blocking_map(target_account_ids, account_id)
-      follow_mapping(Block.where(target_account_id: target_account_ids, account_id: account_id), :target_account_id)
+      follow_mapping(AccountRelation.where(target_account_id: target_account_ids, account_id: account_id, type: :block), :target_account_id)
     end
 
     def muting_map(target_account_ids, account_id)
-      follow_mapping(Mute.where(target_account_id: target_account_ids, account_id: account_id), :target_account_id)
+      follow_mapping(AccountRelation.where(target_account_id: target_account_ids, account_id: account_id, type: :mute), :target_account_id)
     end
 
     def requested_map(target_account_ids, account_id)
