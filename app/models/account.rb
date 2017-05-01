@@ -123,11 +123,11 @@ class Account < ApplicationRecord
   end
 
   def block!(other_account)
-    block_relationships.find_or_create_by!(target_account: other_account)
+    block_relationships.find_or_create_by!(target_account: other_account, block: true)
   end
 
   def mute!(other_account)
-    mute_relationships.find_or_create_by!(target_account: other_account)
+    mute_relationships.find_or_create_by!(target_account: other_account, block: false)
   end
 
   def unfollow!(other_account)
