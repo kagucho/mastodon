@@ -1,0 +1,15 @@
+[submodule "vendor/github.com/garyburd/redigo"]
+	path = vendor/github.com/garyburd/redigo
+	url = https://github.com/garyburd/redigo.git
+[submodule "vendor/github.com/google/uuid"]
+	path = vendor/github.com/google/uuid
+	url = https://github.com/google/uuid.git
+[submodule "vendor/github.com/gorilla/websocket"]
+	path = vendor/github.com/gorilla/websocket
+	url = https://github.com/gorilla/websocket.git
+[submodule "vendor/github.com/joho/godotenv"]
+	path = vendor/github.com/joho/godotenv
+	url = https://github.com/joho/godotenv.git
+[submodule "vendor/github.com/lib/pq"]
+	path = vendor/github.com/lib/pq
+	url = https://github.com/lib/pq
