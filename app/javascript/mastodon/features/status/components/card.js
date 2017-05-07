@@ -1,8 +1,12 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types';
 import punycode from 'punycode';
+import { defineMessages, injectIntl } from 'react-intl';
 
 const IDNA_PREFIX = 'xn--';
+const messages = defineMessages(
+  {video: {id: 'status.video', defaultMessage: 'Video'}});
 
 const decodeIDNA = domain => {
   return domain
@@ -17,10 +21,13 @@ const getHostname = url => {
   return parser.hostname;
 };
 
+@injectIntl
 export default class Card extends React.PureComponent {
 
   static propTypes = {
     card: ImmutablePropTypes.map,
+    intl: PropTypes.object.isRequired,
+    statusId: PropTypes.number.isRequired,
   };
 
   renderLink () {
@@ -59,20 +66,20 @@ export default class Card extends React.PureComponent {
 
     return (
       <a href={card.get('url')} className='status-card-photo' target='_blank' rel='noopener'>
-        <img src={card.get('url')} alt={card.get('title')} width={card.get('width')} height={card.get('height')} />
+        <img src={card.get('url')} alt={card.get('title')}
+             width={card.get('width')} height={card.get('height')}
+             nonce={document.getElementById("img-nonce").textContent} />
       </a>
     );
   }
 
   renderVideo () {
-    const { card } = this.props;
-    const content  = { __html: card.get('html') };
+    const { intl, statusId } = this.props;
 
     return (
-      <div
-        className='status-card-video'
-        dangerouslySetInnerHTML={content}
-      />
+      <div className='status-card-video'>
+        <iframe src={`/api/v1/statuses/${statusId}/card_html`} title={intl.formatMessage(messages.video)} />
+      </div>
     );
   }
 

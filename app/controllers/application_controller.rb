@@ -25,6 +25,35 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError, "No route matches #{params[:unmatched_route]}"
   end
 
+  def redirect_to(options = {}, response_status = {})
+    response.headers['Content-Security-Policy'] = "default-src 'none'"
+    super
+  end
+
+  if Rails.env.development?
+    def render(options = nil, extra_options = {})
+      original = response.headers['Content-Security-Policy']
+      if original
+        script_subed = original.sub('script-src', "script-src 'unsafe-eval'")
+
+        connect_matched = false
+        connect_subed = script_subed.sub('connect-src') {
+          connect_matched = true
+          'connect-src http://localhost:8080 ws://localhost:8080'
+        }
+
+        response.headers['Content-Security-Policy'] = connect_matched ?
+            connect_subed :
+            script_subed + '; connect-src http://localhost:8080 ws://localhost:8080'
+      else
+        response.headers['Content-Security-Policy'] =
+            'connect-src http://localhost:8080 ws://localhost:8080'
+      end
+
+      super
+    end
+  end
+
   private
 
   def https_enabled?
@@ -102,6 +131,7 @@ class ApplicationController < ActionController::Base
       format.any  { head code }
       format.html do
         set_locale
+        response.headers['Content-Security-Policy'] = "default-src 'none'; font-src https://fonts.gstatic.com/s/roboto/v16/CWB0XYA8bzo0kSThX0UTuA.woff2; img-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET} https://fonts.googleapis.com/css"
         render "errors/#{code}", layout: 'error', status: code
       end
     end

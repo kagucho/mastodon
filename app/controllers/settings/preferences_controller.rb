@@ -5,7 +5,9 @@ class Settings::PreferencesController < ApplicationController
 
   before_action :authenticate_user!
 
-  def show; end
+  def show
+    set_csp
+  end
 
   def update
     user_settings.update(user_settings_params.to_h)
@@ -14,11 +16,16 @@ class Settings::PreferencesController < ApplicationController
       I18n.locale = current_user.locale
       redirect_to settings_preferences_path, notice: I18n.t('generic.changes_saved_msg')
     else
+      set_csp
       render :show
     end
   end
 
   private
+
+  def set_csp
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
+  end
 
   def user_settings
     UserSettingsDecorator.new(current_user)

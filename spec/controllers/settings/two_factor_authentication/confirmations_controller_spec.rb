@@ -16,6 +16,7 @@ describe Settings::TwoFactorAuthentication::ConfirmationsController do
       expect(assigns(:qrcode)).to be_instance_of RQRCode::QRCode
       expect(response).to have_http_status(:success)
       expect(response).to render_template(:new)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 
@@ -65,6 +66,7 @@ describe Settings::TwoFactorAuthentication::ConfirmationsController do
           expect(assigns(:recovery_codes)).to eq otp_backup_codes
           expect(flash[:notice]).to eq 'Two-factor authentication successfully enabled'
           expect(response).to have_http_status(:success)
+          expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
           expect(response).to render_template('settings/two_factor_authentication/recovery_codes/index')
         end
       end

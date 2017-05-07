@@ -76,6 +76,12 @@ describe StatusesController do
         expect(response).to have_http_status(:success)
       end
 
+      it 'sets Content-Security-Policy' do
+        status = Fabricate(:status)
+        get :show, params: { account_username: status.account.username, id: status.id }
+        expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; media-src 'self'; script-src 'self'; style-src 'self' 'sha256-qRrgHHCDuxyr4+DLfz1F4BlFayvcGq1hI47y1mNEEQo=' 'sha256-CDezrqMbKJf+dAHyv8FcpR+fJE6UjOO+TRZSTzRLwgo=' 'sha256-Ki4+BbA7mzce+JTtl+Tkj6UE1essH0OVxVREUC/e0ZE=' 'sha256-z0vtjdbuC6Uv1IWeBkO1oUlQY53+gsWMOJRtt4G3wQY=' 'sha256-S7898Hb+PHYyBv4itdTHM50tQsn3LF2RDisrLLd4BLE='"
+      end
+
       it 'renders stream_entries/show' do
         status = Fabricate(:status)
         get :show, params: { account_username: status.account.username, id: status.id }

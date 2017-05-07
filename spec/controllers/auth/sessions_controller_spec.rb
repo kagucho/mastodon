@@ -8,11 +8,15 @@ RSpec.describe Auth::SessionsController, type: :controller do
   describe 'GET #new' do
     before do
       request.env['devise.mapping'] = Devise.mappings[:user]
+      get :new
     end
 
     it 'returns http success' do
-      get :new
       expect(response).to have_http_status(:success)
+    end
+
+    it 'sets Content-Security-Policy' do
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 
@@ -185,6 +189,7 @@ RSpec.describe Auth::SessionsController, type: :controller do
 
         it 'shows a login error' do
           expect(flash[:alert]).to match I18n.t('users.invalid_otp_token')
+          expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
         end
 
         it "doesn't log the user in" do
@@ -213,6 +218,7 @@ RSpec.describe Auth::SessionsController, type: :controller do
 
         it 'shows a login error' do
           expect(flash[:alert]).to match I18n.t('users.invalid_otp_token')
+          expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
         end
 
         it "doesn't log the user in" do

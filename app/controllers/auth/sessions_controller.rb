@@ -21,6 +21,11 @@ class Auth::SessionsController < Devise::SessionsController
     flash.delete(:notice)
   end
 
+  def new
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
+    super
+  end
+
   protected
 
   def find_user
@@ -79,6 +84,7 @@ class Auth::SessionsController < Devise::SessionsController
 
   def prompt_for_two_factor(user)
     session[:otp_user_id] = user.id
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
     render :two_factor
   end
 

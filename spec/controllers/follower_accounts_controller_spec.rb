@@ -20,6 +20,7 @@ describe FollowerAccountsController do
       expect(assigned[1]).to eq follow0
 
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self' 'sha256-Ak1iSdjKFKC2H/gPASbpJuIhcillKWhTZudYIUiaYSc='"
     end
   end
 end

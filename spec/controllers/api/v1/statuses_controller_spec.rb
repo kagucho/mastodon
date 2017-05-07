@@ -93,6 +93,13 @@ RSpec.describe Api::V1::StatusesController, type: :controller do
           expect(response).to have_http_status(:missing)
         end
       end
+
+      describe 'GET #card_html' do
+        it 'returns http unautharized' do
+          get :card_html, params: { id: status.id }
+          expect(response).to have_http_status(:missing)
+        end
+      end
     end
 
     context 'with a public status' do
@@ -120,6 +127,37 @@ RSpec.describe Api::V1::StatusesController, type: :controller do
         it 'returns http success' do
           get :card, params: { id: status.id }
           expect(response).to have_http_status(:success)
+        end
+      end
+
+      describe 'GET #card_html' do
+        context 'without card' do
+          it 'returns http missing' do
+            get :card_html, params: { id: Fabricate(:status, account: user.account).id }
+            expect(response).to have_http_status(:missing)
+          end
+        end
+
+        context 'with card' do
+          before do
+            get :card_html, params: {
+              id: Fabricate(:status,
+                account: user.account,
+                preview_card: Fabricate(:preview_card)).id
+            }
+          end
+
+          it 'returns http success' do
+            expect(response).to have_http_status(:success)
+          end
+
+          it 'sets Content-Security-Policy' do
+            expect(response.headers['Content-Security-Policy']).to eq "connect-src 'none'; script-src 'none'"
+          end
+
+          it 'sets X-Frame-Options' do
+            expect(response.headers['X-Frame-Options']).to eq 'ALLOWALL'
+          end
         end
       end
     end

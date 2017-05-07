@@ -3,6 +3,16 @@
 module StreamEntriesHelper
   EMBEDDED_CONTROLLER = 'stream_entries'
   EMBEDDED_ACTION = 'embed'
+  STYLE_A_SPOILER_RTL = 'display: none; direction: rtl'
+  STYLE_A_SPOILER_LTR = 'display: none; direction: ltr'
+  STYLE_A_UNSPOILER_RTL = 'direction: rtl'
+  STYLE_A_UNSPOILER_LTR = 'direction: ltr'
+  STYLE_P_SPOILER = 'margin-bottom: 0'
+  CSP_STYLE_SRC = [
+    STYLE_A_SPOILER_RTL, STYLE_A_SPOILER_LTR,
+    STYLE_A_UNSPOILER_RTL, STYLE_A_UNSPOILER_LTR,
+    STYLE_P_SPOILER
+  ].collect!(&ContentSecurityPolicy.method(:digest)).join(' ')
 
   def display_name(account)
     account.display_name.presence || account.username

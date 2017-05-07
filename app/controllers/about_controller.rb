@@ -2,6 +2,7 @@
 
 class AboutController < ApplicationController
   before_action :set_body_classes
+  before_action :set_csp
   before_action :set_instance_presenter, only: [:show, :more]
 
   def show; end
@@ -23,5 +24,9 @@ class AboutController < ApplicationController
 
   def set_body_classes
     @body_classes = 'about-body'
+  end
+
+  def set_csp
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
   end
 end

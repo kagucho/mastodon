@@ -7,9 +7,12 @@ module Admin
 
     def index
       @accounts = filtered_accounts.page(params[:page])
+      set_csp
     end
 
-    def show; end
+    def show
+      set_csp
+    end
 
     def subscribe
       Pubsubhubbub::SubscribeWorker.perform_async(@account.id)
@@ -56,6 +59,10 @@ module Admin
         :email,
         :ip
       )
+    end
+
+    def set_csp
+      response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
     end
   end
 end

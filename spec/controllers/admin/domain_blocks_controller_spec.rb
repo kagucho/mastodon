@@ -24,6 +24,7 @@ RSpec.describe Admin::DomainBlocksController, type: :controller do
       expect(assigned.count).to eq 1
       expect(assigned.klass).to be DomainBlock
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 
@@ -33,15 +34,22 @@ RSpec.describe Admin::DomainBlocksController, type: :controller do
 
       expect(assigns(:domain_block)).to be_instance_of(DomainBlock)
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 
   describe 'GET #show' do
-    it 'returns http success' do
+    before do
       domain_block = Fabricate(:domain_block)
       get :show, params: { id: domain_block.id }
+    end
 
+    it 'returns http success' do
       expect(response).to have_http_status(:success)
+    end
+
+    it 'sets Content-Security-Policy' do
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 

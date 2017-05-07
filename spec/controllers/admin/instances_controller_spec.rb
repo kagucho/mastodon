@@ -25,8 +25,7 @@ RSpec.describe Admin::InstancesController, type: :controller do
       instances = assigns(:instances).to_a
       expect(instances.size).to eq 1
       expect(instances[0].domain).to eq 'less.popular'
-
-      expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 end

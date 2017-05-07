@@ -4,6 +4,7 @@ module Admin
   class SubscriptionsController < BaseController
     def index
       @subscriptions = ordered_subscriptions.page(requested_page)
+      response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
     end
 
     private

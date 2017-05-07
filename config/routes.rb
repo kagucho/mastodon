@@ -145,6 +145,7 @@ Rails.application.routes.draw do
         member do
           get :context
           get :card
+          get :card_html
         end
       end
 

@@ -10,6 +10,8 @@ class Settings::FollowerDomainsController < ApplicationController
   def show
     @account = current_account
     @domains = current_account.followers.reorder(nil).group('accounts.domain').select('accounts.domain, count(accounts.id) as accounts_from_domain').page(params[:page]).per(10)
+
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
   end
 
   def update

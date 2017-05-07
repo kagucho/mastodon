@@ -19,6 +19,7 @@ describe Admin::ReportsController do
       expect(reports.size).to eq 1
       expect(reports[0]).to eq specified
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
 
     it 'returns http success with resolved filter' do
@@ -32,17 +33,18 @@ describe Admin::ReportsController do
       expect(reports[0]).to eq specified
 
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 
   describe 'GET #show' do
     it 'renders report' do
       report = Fabricate(:report)
-
       get :show, params: { id: report }
 
       expect(assigns(:report)).to eq report
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 

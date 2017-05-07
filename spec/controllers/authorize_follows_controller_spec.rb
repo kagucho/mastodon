@@ -28,6 +28,12 @@ describe AuthorizeFollowsController do
         expect(response).to render_template(:error)
       end
 
+      it 'sets Content-Security-Policy' do
+        get :show
+
+        expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
+      end
+
       it 'renders error when account cant be found' do
         service = double
         allow(ResolveRemoteAccountService).to receive(:new).and_return(service)
@@ -90,6 +96,7 @@ describe AuthorizeFollowsController do
         post :create, params: { acct: 'acct:user@hostname' }
 
         expect(service).to have_received(:call).with(account, 'user@hostname')
+        expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
         expect(response).to render_template(:error)
       end
 

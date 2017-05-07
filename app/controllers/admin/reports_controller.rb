@@ -6,9 +6,12 @@ module Admin
 
     def index
       @reports = filtered_reports.page(params[:page])
+      set_csp
     end
 
-    def show; end
+    def show
+      set_csp
+    end
 
     def update
       process_report
@@ -61,6 +64,10 @@ module Admin
         :resolved,
         :target_account_id
       )
+    end
+
+    def set_csp
+      response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
     end
 
     def set_report

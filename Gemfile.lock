@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/kagucho/rqrcode.git
+  revision: ec5fc5af321183b8470b67f6e76f3dd46f97d0b0
+  specs:
+    rqrcode (0.10.1)
+      chunky_png (~> 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -356,8 +363,6 @@ GEM
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
     rotp (2.1.2)
-    rqrcode (0.10.1)
-      chunky_png (~> 1.0)
     rspec-core (3.6.0)
       rspec-support (~> 3.6.0)
     rspec-expectations (3.6.0)
@@ -540,7 +545,7 @@ DEPENDENCIES
   redis (~> 3.3)
   redis-namespace (~> 1.5)
   redis-rails (~> 5.0)
-  rqrcode (~> 0.10)
+  rqrcode!
   rspec-rails (~> 3.6)
   rspec-sidekiq (~> 3.0)
   rubocop

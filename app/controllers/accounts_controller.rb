@@ -8,6 +8,8 @@ class AccountsController < ApplicationController
       format.html do
         @statuses = @account.statuses.permitted_for(@account, current_account).paginate_by_max_id(20, params[:max_id], params[:since_id])
         @statuses = cache_collection(@statuses, Status)
+
+        response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET} #{ContentSecurityPolicy.digest(@card_style)} #{StreamEntriesHelper::CSP_STYLE_SRC}"
       end
 
       format.atom do

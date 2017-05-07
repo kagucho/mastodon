@@ -9,10 +9,10 @@
 
   .status__content.p-name.emojify<
     - if status.spoiler_text?
-      %p{ style: 'margin-bottom: 0' }<
+      %p{ style: StreamEntriesHelper::STYLE_P_SPOILER }<
         %span.p-summary> #{status.spoiler_text}&nbsp;
         %a.status__content__spoiler-link{ href: '#' }= t('statuses.show_more')
-    .e-content{ lang: status.language, style: "display: #{status.spoiler_text? ? 'none' : 'block'}; direction: #{rtl_status?(status) ? 'rtl' : 'ltr'}" }= Formatter.instance.format(status)
+    .e-content{ lang: status.language, style: status.spoiler_text? ? (rtl_status?(status) ? StreamEntriesHelper::STYLE_A_SPOILER_RTL : StreamEntriesHelper::STYLE_A_SPOILER_LTR) : (rtl_status?(status) ? StreamEntriesHelper::STYLE_A_UNSPOILER_RTL : StreamEntriesHelper::STYLE_A_UNSPOILER_LTR) }= Formatter.instance.format(status)
 
   - unless status.media_attachments.empty?
     - if status.media_attachments.first.video?

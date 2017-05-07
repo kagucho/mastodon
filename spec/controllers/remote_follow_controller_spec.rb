@@ -10,6 +10,7 @@ describe RemoteFollowController do
       account = Fabricate(:account)
       get :new, params: { account_username: account.to_param }
 
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
       expect(response).to have_http_status(:success)
       expect(response).to render_template(:new)
       expect(assigns(:remote_follow).acct).to be_nil
@@ -20,6 +21,7 @@ describe RemoteFollowController do
       account = Fabricate(:account)
       get :new, params: { account_username: account.to_param }
 
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
       expect(response).to have_http_status(:success)
       expect(response).to render_template(:new)
       expect(assigns(:remote_follow).acct).to eq 'user@example.com'

@@ -8,9 +8,16 @@ RSpec.describe Settings::ImportsController, type: :controller do
   end
 
   describe "GET #show" do
-    it "returns http success" do
+    before do
       get :show
+    end
+
+    it "returns http success" do
       expect(response).to have_http_status(:success)
+    end
+
+    it "sets Content-Security-Policy" do
+      expect(response.headers["Content-Security-Policy"]).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 

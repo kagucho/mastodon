@@ -27,6 +27,7 @@ RSpec.describe Admin::SubscriptionsController, type: :controller do
       expect(subscriptions[0]).to eq specified
 
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
     end
   end
 end

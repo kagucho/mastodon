@@ -8,6 +8,7 @@ class RemoteFollowController < ApplicationController
 
   def new
     @remote_follow = RemoteFollow.new(session_params)
+    set_csp
   end
 
   def create
@@ -17,6 +18,7 @@ class RemoteFollowController < ApplicationController
       session[:remote_follow] = @remote_follow.acct
       redirect_to @remote_follow.subscribe_address_for(@account)
     else
+      set_csp
       render :new
     end
   end
@@ -33,6 +35,10 @@ class RemoteFollowController < ApplicationController
 
   def set_account
     @account = Account.find_local!(params[:account_username])
+  end
+
+  def set_csp
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
   end
 
   def suspended_account?

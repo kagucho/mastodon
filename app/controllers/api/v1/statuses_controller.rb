@@ -5,10 +5,8 @@ class Api::V1::StatusesController < Api::BaseController
 
   before_action :authorize_if_got_token, except:            [:create, :destroy]
   before_action -> { doorkeeper_authorize! :write }, only:  [:create, :destroy]
-  before_action :require_user!, except:  [:show, :context, :card]
-  before_action :set_status, only:       [:show, :context, :card]
-
-  respond_to :json
+  before_action :require_user!, except:  [:show, :context, :card, :card_html]
+  before_action :set_status, only:       [:show, :context, :card, :card_html]
 
   def show
     cached  = Rails.cache.read(@status.cache_key)
@@ -30,6 +28,17 @@ class Api::V1::StatusesController < Api::BaseController
   def card
     @card = PreviewCard.find_by(status: @status)
     render_empty if @card.nil?
+  end
+
+  def card_html
+    @card = PreviewCard.find_by(status: @status)
+    if @card.nil?
+      respond_with_error 404
+    else
+      response.headers['Content-Security-Policy'] = "connect-src 'none'; script-src 'none'"
+      response.headers['X-Frame-Options'] = 'ALLOWALL'
+      render layout: false
+    end
   end
 
   def create

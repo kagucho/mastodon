@@ -9,6 +9,7 @@ module Settings
 
     def show
       @confirmation = Form::TwoFactorConfirmation.new
+      response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
     end
 
     def create

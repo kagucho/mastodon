@@ -47,7 +47,7 @@ gem 'rack-timeout', '~> 0.4'
 gem 'rails-i18n', '~> 5.0'
 gem 'rails-settings-cached', '~> 0.6'
 gem 'redis', '~> 3.3', require: ['redis', 'redis/connection/hiredis']
-gem 'rqrcode', '~> 0.10'
+gem 'rqrcode', github: 'kagucho/rqrcode'
 gem 'ruby-oembed', '~> 0.12', require: 'oembed'
 gem 'sanitize', '~> 4.4'
 gem 'sidekiq', '~> 5.0'

@@ -25,6 +25,7 @@ describe Oauth::AuthorizedApplicationsController do
       it 'returns http success' do
         subject
         expect(response).to have_http_status(:success)
+        expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
       end
 
       include_examples 'stores location for user'

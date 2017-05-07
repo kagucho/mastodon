@@ -16,6 +16,8 @@ const messages = defineMessages({
   flags: { id: 'emoji_button.flags', defaultMessage: 'Flags' },
 });
 
+const nonce = document.getElementById("style-nonce").textContent;
+
 const settings = {
   imageType: 'png',
   sprites: false,
@@ -116,7 +118,7 @@ export default class EmojiPickerDropdown extends React.PureComponent {
         <DropdownContent className='dropdown__left'>
           {
             this.state.active && !this.state.loading &&
-            (<EmojiPicker emojione={settings} onChange={this.handleChange} searchPlaceholder={intl.formatMessage(messages.emoji_search)} categories={categories} search />)
+            (<EmojiPicker emojione={settings} nonce={nonce} onChange={this.handleChange} searchPlaceholder={intl.formatMessage(messages.emoji_search)} categories={categories} search />)
           }
         </DropdownContent>
       </Dropdown>

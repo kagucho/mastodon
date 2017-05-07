@@ -1,4 +1,4 @@
-.card.h-card.p-author{ style: "background-image: url(#{account.header.url(:original)})" }
+.card.h-card.p-author{ style: card_style }
   - if user_signed_in? && current_account.id != account.id && !current_account.requested?(account)
     .controls
       - if current_account.following?(account)

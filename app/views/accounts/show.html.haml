@@ -14,7 +14,7 @@
 .h-feed
   %data.p-name{ value: "#{@account.username} on #{site_hostname}" }/
 
-  = render 'header', account: @account
+  = render 'header', account: @account, card_style: @card_style
 
   - if @statuses.empty?
     .accounts-grid

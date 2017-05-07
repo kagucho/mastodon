@@ -4,6 +4,6 @@
 - content_for :header_tags do
   = render 'accounts/og', account: @account, url: account_followers_url(@account, only_path: false)
 
-= render 'accounts/header', account: @account
+= render 'accounts/header', account: @account, card_style: @card_style
 
 = render 'accounts/follow_grid', follows: @follows, accounts: @follows.map(&:target_account)

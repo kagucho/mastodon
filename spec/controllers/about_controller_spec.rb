@@ -3,6 +3,12 @@ require 'rails_helper'
 RSpec.describe AboutController, type: :controller do
   render_views
 
+  RSpec.shared_examples :csp do
+    it 'sets Content-Security-Policy' do
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
+    end
+  end
+
   describe 'GET #show' do
     before do
       get :show
@@ -19,6 +25,8 @@ RSpec.describe AboutController, type: :controller do
     it 'returns http success' do
       expect(response).to have_http_status(:success)
     end
+
+    include_examples :csp
   end
 
   describe 'GET #more' do
@@ -37,6 +45,8 @@ RSpec.describe AboutController, type: :controller do
     it 'returns http success' do
       expect(response).to have_http_status(:success)
     end
+
+    include_examples :csp
   end
 
   describe 'GET #terms' do
@@ -51,6 +61,8 @@ RSpec.describe AboutController, type: :controller do
     it 'returns http success' do
       expect(response).to have_http_status(:success)
     end
+
+    include_examples :csp
   end
 
   describe 'helper_method :new_user' do

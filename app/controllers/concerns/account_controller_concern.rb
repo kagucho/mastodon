@@ -16,6 +16,7 @@ module AccountControllerConcern
 
   def set_account
     @account = Account.find_local!(params[:account_username])
+    @card_style = "background-image: url(#{@account.header.url(:original)})"
   end
 
   def set_link_headers

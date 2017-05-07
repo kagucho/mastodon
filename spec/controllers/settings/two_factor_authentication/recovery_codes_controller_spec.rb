@@ -20,6 +20,7 @@ describe Settings::TwoFactorAuthentication::RecoveryCodesController do
       expect(assigns(:recovery_codes)).to eq otp_backup_codes
       expect(flash[:notice]).to eq 'Recovery codes successfully regenerated'
       expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'"
       expect(response).to render_template(:index)
     end
 

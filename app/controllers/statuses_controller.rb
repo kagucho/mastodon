@@ -14,6 +14,7 @@ class StatusesController < ApplicationController
     @ancestors   = @status.reply? ? cache_collection(@status.ancestors(current_account), Status) : []
     @descendants = cache_collection(@status.descendants(current_account), Status)
 
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; media-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET} #{StreamEntriesHelper::CSP_STYLE_SRC}"
     render 'stream_entries/show'
   end
 

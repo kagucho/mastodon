@@ -19,6 +19,10 @@ describe ApplicationController, type: :controller do
     def invalid_authenticity_token
       raise ActionController::InvalidAuthenticityToken, ''
     end
+
+    def redirect_to_root
+      redirect_to ''
+    end
   end
 
   shared_examples 'respond_with_error' do |code|
@@ -30,6 +34,7 @@ describe ApplicationController, type: :controller do
     it "returns http #{code} for http" do
       subject
       expect(response).to have_http_status(code)
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'; font-src https://fonts.gstatic.com/s/roboto/v16/CWB0XYA8bzo0kSThX0UTuA.woff2; img-src 'self'; style-src 'self' https://fonts.googleapis.com/css"
     end
 
     it "renders template for http" do
@@ -169,6 +174,14 @@ describe ApplicationController, type: :controller do
     it 'raises error' do
       controller.params[:unmatched_route] = 'unmatched'
       expect{ controller.raise_not_found }.to raise_error(ActionController::RoutingError, 'No route matches unmatched')
+    end
+  end
+
+  describe 'redirect_to' do
+    it 'sets Content-Security-Policy' do
+    routes.draw { get 'redirect_to_root' => 'anonymous#redirect_to_root' }
+      get 'redirect_to_root'
+      expect(response.headers['Content-Security-Policy']).to eq "default-src 'none'"
     end
   end
 

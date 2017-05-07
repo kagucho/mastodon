@@ -11,12 +11,15 @@ class Settings::ProfilesController < ApplicationController
   obfuscate_filename [:account, :avatar]
   obfuscate_filename [:account, :header]
 
-  def show; end
+  def show
+    set_csp
+  end
 
   def update
     if @account.update(account_params)
       redirect_to settings_profile_path, notice: I18n.t('generic.changes_saved_msg')
     else
+      set_csp
       render :show
     end
   end
@@ -29,5 +32,9 @@ class Settings::ProfilesController < ApplicationController
 
   def set_account
     @account = current_user.account
+  end
+
+  def set_csp
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
   end
 end

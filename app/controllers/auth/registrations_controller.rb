@@ -6,6 +6,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :check_enabled_registrations, only: [:new, :create]
   before_action :configure_sign_up_params, only: [:create]
   before_action :set_sessions, only: [:edit, :update]
+  before_action :set_csp
 
   def destroy
     not_found
@@ -35,6 +36,10 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   def check_enabled_registrations
     redirect_to root_path if single_user_mode? || !Setting.open_registrations
+  end
+
+  def set_csp
+    response.headers['Content-Security-Policy'] = "default-src 'none'; font-src #{ContentSecurityPolicy::ASSET}; img-src #{ContentSecurityPolicy::ASSET}; script-src #{ContentSecurityPolicy::ASSET}; style-src #{ContentSecurityPolicy::ASSET}"
   end
 
   private

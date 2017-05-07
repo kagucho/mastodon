@@ -60,5 +60,12 @@ RSpec.describe HomeController, type: :controller do
         expect(assigns(:streaming_api_base_url)).to eq 'ws://localhost:4000'
       end
     end
+
+    it 'sets Content-Security-Policy to the page for users who signed in' do
+      user = Fabricate(:user)
+      sign_in(user)
+      get :index
+      expect(response.headers["Content-Security-Policy"]).to match "child-src 'self'; connect-src ws://localhost:4000 'self'; default-src 'none'; font-src 'self'; frame-src 'self'; img-src 'self' 'nonce-.+' data:; media-src 'self'; script-src 'self'; style-src 'self' 'nonce-.+'"
+    end
   end
 end
