@@ -10,7 +10,7 @@ import DisplayName from '../../../components/display_name';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 const messages = defineMessages({
-  reblog: { id: 'status.reblog', defaultMessage: 'Boost' },
+  reblog: { id: 'status.reblog', defaultMessage: 'Pay a blue rupee' },
 });
 
 @injectIntl

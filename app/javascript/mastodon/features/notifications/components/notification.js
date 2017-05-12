@@ -56,7 +56,7 @@ export default class Notification extends ImmutablePureComponent {
           <div className='notification__favourite-icon-wrapper'>
             <i className='fa fa-fw fa-retweet' />
           </div>
-          <FormattedMessage id='notification.reblog' defaultMessage='{name} boosted your status' values={{ name: link }} />
+          <FormattedMessage id='notification.reblog' defaultMessage='{name} paid a blue rupee for your status' values={{ name: link }} />
         </div>
 
         <StatusContainer id={notification.get('status')} account={notification.get('account')} muted withDismiss />

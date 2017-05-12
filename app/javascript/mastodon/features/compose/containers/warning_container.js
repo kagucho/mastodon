@@ -32,7 +32,7 @@ const WarningWrapper = ({ needsLeakWarning, needsLockWarning, mentionedDomains }
       <Warning
         message={<FormattedMessage
           id='compose_form.privacy_disclaimer'
-          defaultMessage='Your private status will be delivered to mentioned users on {domains}. Do you trust {domainsCount, plural, one {that server} other {those servers}}? Post privacy only works on Mastodon instances. If {domains} {domainsCount, plural, one {is not a Mastodon instance} other {are not Mastodon instances}}, there will be no indication that your post is private, and it may be boosted or otherwise made visible to unintended recipients.'
+          defaultMessage='Your private status will be delivered to mentioned users on {domains}. Do you trust {domainsCount, plural, one {that server} other {those servers}}? Post privacy only works on Mastodon instances. If {domains} {domainsCount, plural, one {is not a Mastodon instance} other {are not Mastodon instances}}, there will be no indication that your post is private, and others may pay a blue rupee for the post or otherwise it may be made visible to unintended recipients.'
           values={{ domains: <strong>{mentionedDomains.join(', ')}</strong>, domainsCount: mentionedDomains.size }}
         />}
       />

@@ -63,7 +63,7 @@ export default class ColumnSettings extends React.PureComponent {
           <SettingToggle prefix='notifications' settings={settings} settingKey={['sounds', 'mention']} onChange={onChange} label={soundStr} />
         </div>
 
-        <span className='column-settings__section'><FormattedMessage id='notifications.column_settings.reblog' defaultMessage='Boosts:' /></span>
+        <span className='column-settings__section'><FormattedMessage id='notifications.column_settings.reblog' defaultMessage='Posts which deserves a blue rupee for each:' /></span>
 
         <div className='column-settings__row'>
           <SettingToggle prefix='notifications_desktop' settings={settings} settingKey={['alerts', 'reblog']} onChange={onChange} label={alertStr} />
