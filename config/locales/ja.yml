@@ -1,17 +1,17 @@
 ---
 ja:
   about:
-    about_mastodon: Mastodon は<em>自由でオープンソース</em>なソーシャルネットワークです。商用プラットフォームの代替となる<em>分散型</em>を採用し、あなたのやりとりが一つの会社によって独占されるのを防ぎます。信頼できるインスタンスを選択してください &mdash; どのインスタンスを選んでも、誰とでもやりとりすることができます。 だれでも自分の Mastodon インスタンスを作ることができ、シームレスに<em>ソーシャルネットワーク</em>に参加できます。
-    about_this: このインスタンスについて
+    about_mastodon: Mastodon は<em>自由でオープンソース</em>なソーシャルネットワークです。商用プラットフォームの代替となる<em>分散型</em>を採用し、あなたのやりとりが一つの通信局によって独占されるのを防ぎます。信頼できる通信局を選択してください &mdash; どの通信局を選んでも、誰とでもやりとりすることができます。 だれでも自分の Mastodon 通信局を作ることができ、シームレスに<em>ソーシャルネットワーク</em>に参加できます。
+    about_this: この通信局について
     business_email: 'ビジネスメールアドレス:'
-    closed_registrations: 現在このインスタンスでの新規登録は受け付けていません。
+    closed_registrations: 現在この通信局での新規登録は受け付けていません。
     contact: 連絡先
     description_headline: "%{domain} とは？"
-    domain_count_after: 個のインスタンス
+    domain_count_after: 個の通信局
     domain_count_before: 接続中
     get_started: 参加する
     links: リンク
-    other_instances: 他のインスタンス
+    other_instances: 他の通信局
     source_code: ソースコード
     status_count_after: トゥート
     status_count_before: トゥート数
@@ -127,7 +127,7 @@ ja:
     instances:
       account_count: 既知のアカウント数
       domain_name: ドメイン名
-      title: 既知のインスタンス
+      title: 既知の通信局
     reports:
       action_taken_by: レポート処理者
       are_you_sure: 本当に実行しますか？
@@ -168,14 +168,14 @@ ja:
           title: 新規登録を受け付ける
       site_description:
         desc_html: フロントページへの表示と meta タグに使用される紹介文です。HTMLタグ、特に<code>&lt;a&gt;</code> と <code>&lt;em&gt;</code>が使えます。
-        title: インスタンスの説明
+        title: 通信局の説明
       site_description_extended:
-        desc_html: あなたのインスタンスにおける行動規範やルール、ガイドライン、そのほかの記述をする際に最適な場所です。HTMLタグが使えます
+        desc_html: あなたの通信局における行動規範やルール、ガイドライン、そのほかの記述をする際に最適な場所です。HTMLタグが使えます
         title: カスタム詳細説明
       site_terms:
         desc_html: あなたは独自のプライバシーポリシーや利用規約、そのほかの法的根拠を書くことができます。HTMLタグが使えます
         title: カスタム利用規約
-      site_title: インスタンスの名前
+      site_title: 通信局の名前
       timeline_preview:
         desc_html: ランディングページに公開タイムラインを表示します
         title: タイムラインプレビュー
@@ -194,7 +194,7 @@ ja:
       subject: "%{instance} の新しい通報 (#%{id})"
   application_mailer:
     settings: 'メール設定の変更: %{link}'
-    signature: Mastodon %{instance} インスタンスからの通知
+    signature: '%{instance} Mastodon通信局からの通知'
     view: 'View:'
   applications:
     invalid_url: URLが無効です
@@ -241,7 +241,7 @@ ja:
     description_html: あなたのアカウントに含まれるコンテンツは全て削除され、アカウントは無効化されます。これは恒久的なもので、<strong>取り消すことはできません</strong>。なりすましを防ぐために、同じユーザー名で再度登録することはできなくなります。
     proceed: アカウントを削除する
     success_msg: アカウントは正常に削除されました
-    warning_html: 削除が保証されるのはこのインスタンス上のコンテンツのみです。他のインスタンス等、外部に広く共有されたコンテンツについては痕跡が残ることがあります。また、現在接続できないサーバーや、あなたの更新を受け取らなくなったサーバーに対しては、削除は反映されません。
+    warning_html: 削除が保証されるのはこの通信局上のコンテンツのみです。他の通信局等、外部に広く共有されたコンテンツについては痕跡が残ることがあります。また、現在接続できないサーバーや、あなたの更新を受け取らなくなったサーバーに対しては、削除は反映されません。
     warning_title: 共有されたコンテンツについて
   errors:
     '403': このページを表示する権限がありません
@@ -260,7 +260,7 @@ ja:
     storage: メディア
   followers:
     domain: ドメイン
-    explanation_html: あなたの投稿のプライバシーを確保したい場合、誰があなたをフォローしているのかを把握している必要があります。 <strong>プライベート投稿は、あなたのフォロワーがいる全てのインスタンスに配信されます</strong>。 フォロワーのインスタンスの管理者やソフトウェアがあなたのプライバシーを尊重してくれるかどうか怪しい場合は、そのフォロワーを削除した方がよいかもしれません。
+    explanation_html: あなたの投稿のプライバシーを確保したい場合、誰があなたをフォローしているのかを把握している必要があります。 <strong>プライベート投稿は、あなたのフォロワーがいる全ての通信局に配信されます</strong>。 フォロワーの通信局の管理者やソフトウェアがあなたのプライバシーを尊重してくれるかどうか怪しい場合は、そのフォロワーを削除した方がよいかもしれません。
     followers_count: フォロワー数
     lock_link: 非公開アカウント
     purge: フォロワーから削除する
@@ -278,14 +278,14 @@ ja:
       one: エラーが発生しました。以下のエラーを確認してください
       other: エラーが発生しました。以下の%{count}個のエラーを確認してください
   imports:
-    preface: 他のインスタンスでエクスポートされたファイルから、フォロー/ブロックした情報をこのインスタンス上のアカウントにインポートできます。
+    preface: 他の通信局でエクスポートされたファイルから、フォロー/ブロックした情報をこの通信局上のアカウントにインポートできます。
     success: ファイルは正常にアップロードされ、現在処理中です。しばらくしてから確認してください
     types:
       blocking: ブロックしたアカウントリスト
       following: フォロー中のアカウントリスト
       muting: ミュートしたアカウントリスト
     upload: アップロード
-  landing_strip_html: "<strong>%{name}</strong> さんはインスタンス %{link_to_root_path} のユーザーです。アカウントさえ持っていればフォローしたり会話したりできます。"
+  landing_strip_html: "<strong>%{name}</strong> さんは通信局 %{link_to_root_path} のユーザーです。アカウントさえ持っていればフォローしたり会話したりできます。"
   landing_strip_signup_html: もしお持ちでないなら <a href="%{sign_up_path}">こちら</a> からサインアップできます。
   media_attachments:
     validations:
@@ -368,7 +368,7 @@ ja:
     delete: アカウントの削除
     edit_profile: プロフィールを編集
     export: データのエクスポート
-    followers: 信頼済みのインスタンス
+    followers: 信頼済みの通信局
     import: データのインポート
     preferences: ユーザー設定
     settings: 設定
