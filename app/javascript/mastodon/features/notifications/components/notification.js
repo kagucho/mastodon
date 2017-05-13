@@ -41,7 +41,7 @@ export default class Notification extends ImmutablePureComponent {
           <div className='notification__favourite-icon-wrapper'>
             <i className='fa fa-fw fa-star star-icon' />
           </div>
-          <FormattedMessage id='notification.favourite' defaultMessage='{name} favourited your status' values={{ name: link }} />
+          <FormattedMessage id='notification.favourite' defaultMessage='{name} gave a triforce for your status' values={{ name: link }} />
         </div>
 
         <StatusContainer id={notification.get('status')} account={notification.get('account')} muted withDismiss />

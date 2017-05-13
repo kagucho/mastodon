@@ -11,7 +11,7 @@ const messages = defineMessages({
   reply: { id: 'status.reply', defaultMessage: 'Reply' },
   reblog: { id: 'status.reblog', defaultMessage: 'Pay a blue rupee' },
   cannot_reblog: { id: 'status.cannot_reblog', defaultMessage: 'The author decliened to receive a blue rupee for this post' },
-  favourite: { id: 'status.favourite', defaultMessage: 'Favourite' },
+  favourite: { id: 'status.favourite', defaultMessage: 'Give a triforce' },
   report: { id: 'status.report', defaultMessage: 'Report @{name}' },
 });
 

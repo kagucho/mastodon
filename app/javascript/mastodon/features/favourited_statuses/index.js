@@ -11,7 +11,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 const messages = defineMessages({
-  heading: { id: 'column.favourites', defaultMessage: 'Favourites' },
+  heading: { id: 'column.favourites', defaultMessage: 'Triforces' },
 });
 
 const mapStateToProps = state => ({
