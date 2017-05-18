@@ -454,6 +454,57 @@ RSpec.describe Account, type: :model do
         expect(Account.suspended).to match_array([account_1])
       end
     end
+
+    describe 'following' do
+      it 'returns an array of accounts who are following the specified one' do
+        account_1 = Fabricate(:account)
+        account_2 = Fabricate(:account)
+        followee = Fabricate(:account)
+        account_1.follow!(followee)
+        expect(Account.following(followee)).to match_array([account_1])
+      end
+    end
+
+    describe 'not_blocking_accounts_in' do
+      it 'returns an array of accounts who are not blocking the given ones' do
+        account_1 = Fabricate(:account)
+        account_2 = Fabricate(:account)
+        blocked = Fabricate(:account)
+        account_2.block!(blocked)
+        account_2.save!
+        #Fabricate(:block, account: account)
+        expect(Account.not_blocking_accounts_in([blocked])).to match_array([account_1, blocked])
+      end
+    end
+
+    describe 'not_blocked_by' do
+      it 'returns an array of accounts who are not blocked by the given one' do
+        account_1 = Fabricate(:account)
+        account_2 = Fabricate(:account)
+        blocking = Fabricate(:account)
+        blocking.block!(account_2)
+        expect(Account.not_blocked_by(blocking)).to match_array([account_1, blocking])
+      end
+    end
+
+    describe 'not_domain_blocking' do
+      it 'returns an array of accounts who are not blocking the given domain' do
+        account_1 = Fabricate(:account)
+        account_2 = Fabricate(:account)
+        account_2.block_domain!('blocked.com')
+        expect(Account.not_domain_blocking('blocked.com')).to match_array([account_1])
+      end
+    end
+
+    describe 'not_muting_accounts_in' do
+      it 'returns an array of accounts who are not muting the given ones' do
+        account_1 = Fabricate(:account)
+        account_2 = Fabricate(:account)
+        muted = Fabricate(:account)
+        account_2.mute!(muted)
+        expect(Account.not_muting_accounts_in([muted])).to match_array([account_1, muted])
+      end
+    end
   end
 
   describe 'static avatars' do

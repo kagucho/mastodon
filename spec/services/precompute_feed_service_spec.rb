@@ -13,10 +13,9 @@ RSpec.describe PrecomputeFeedService do
       Fabricate(:follow, account: account, target_account: followed_account)
       status = Fabricate(:status, account: followed_account)
 
-      expected_redis_args = FeedManager.instance.key(:home, account.id), status.id, status.id
-      expect_any_instance_of(Redis).to receive(:zadd).with(*expected_redis_args)
-
       subject.call(account)
+
+      expect(Redis.current.zscore(FeedManager.instance.key(:home, account.id), status.id)).to eq status.id
     end
   end
 end

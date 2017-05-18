@@ -54,6 +54,38 @@ module AccountInteractions
     has_many :muted_by, -> { order('mutes.id desc') }, through: :muted_by_relationships, source: :account
     has_many :conversation_mutes, dependent: :destroy
     has_many :domain_blocks, class_name: 'AccountDomainBlock', dependent: :destroy
+
+    scope(:following, ->(other_account) do
+      joins(:following).where(followings_accounts: { id: other_account.id })
+    end)
+
+    scope(:not_blocking_accounts_in, ->(other_accounts) do
+      joins('LEFT OUTER JOIN blocks AS account_not_blocking_accounts_in ON account_not_blocking_accounts_in.account_id=accounts.id')
+        .group(:id)
+        .having('every(COALESCE(account_not_blocking_accounts_in.target_account_id NOT IN (?), TRUE))',
+                other_accounts.map(&:id))
+    end)
+
+    scope(:not_blocked_by, ->(other_account) do
+      joins('LEFT OUTER JOIN blocks AS account_not_blocked_by ON account_not_blocked_by.target_account_id=accounts.id')
+        .group(:id)
+        .having('every(COALESCE(account_not_blocked_by.account_id != ?, TRUE))',
+                other_account.id)
+    end)
+
+    scope(:not_domain_blocking, ->(domain) do
+      joins('LEFT OUTER JOIN account_domain_blocks AS account_not_domain_blocking ON account_not_domain_blocking.account_id=accounts.id')
+        .group(:id)
+        .having('every(COALESCE(account_not_domain_blocking.domain != ?, TRUE))',
+                domain)
+    end)
+
+    scope(:not_muting_accounts_in, ->(other_accounts) do
+      joins('LEFT OUTER JOIN mutes AS account_not_muting_accounts_in ON account_not_muting_accounts_in.account_id=accounts.id')
+        .group(:id)
+        .having('every(COALESCE(account_not_muting_accounts_in.target_account_id NOT IN (?), TRUE))',
+                other_accounts.map(&:id))
+    end)
   end
 
   def follow!(other_account)
