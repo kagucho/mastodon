@@ -24,7 +24,7 @@ RSpec.describe HomeController, type: :controller do
       end
 
       it 'assigns @token' do
-        Doorkeeper.configure { access_token_expires_in 42 }
+        #Doorkeeper.configure { access_token_expires_in 42 }
         app = Doorkeeper::Application.create!(name: 'Web', superapp: true, redirect_uri: Doorkeeper.configuration.native_redirect_uri)
         subject
         token = Doorkeeper::AccessToken.find_by(token: assigns(:token))
