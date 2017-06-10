@@ -34,6 +34,7 @@ class CommunityTimeline extends React.PureComponent {
     streamingAPIBaseURL: PropTypes.string.isRequired,
     accessToken: PropTypes.string.isRequired,
     hasUnread: PropTypes.bool,
+    scrollable: PropTypes.bool,
     standalone: PropTypes.bool,
   };
 

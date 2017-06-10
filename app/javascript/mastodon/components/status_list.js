@@ -9,6 +9,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 class StatusList extends ImmutablePureComponent {
 
   static propTypes = {
+    scrollable: PropTypes.bool,
     scrollKey: PropTypes.string.isRequired,
     statusIds: ImmutablePropTypes.list.isRequired,
     onScrollToBottom: PropTypes.func,
@@ -146,7 +147,7 @@ class StatusList extends ImmutablePureComponent {
   }
 
   render () {
-    const { statusIds, onScrollToBottom, scrollKey, shouldUpdateScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone } = this.props;
+    const { statusIds, onScrollToBottom, scrollable, scrollKey, shouldUpdateScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone } = this.props;
     const { isIntersecting } = this.state;
 
     let loadMore       = null;
@@ -163,7 +164,7 @@ class StatusList extends ImmutablePureComponent {
 
     if (isLoading || statusIds.size > 0 || !emptyMessage) {
       scrollableArea = (
-        <div className='scrollable' ref={this.setRef}>
+        <div className={scrollable ? 'scrollable' : ''} ref={this.setRef}>
           {unread}
 
           <div className='status-list'>

@@ -40,6 +40,7 @@ const makeMapStateToProps = () => {
   const getStatusIds = makeGetStatusIds();
 
   const mapStateToProps = (state, props) => ({
+    scrollable: props.scrollable,
     scrollKey: props.scrollKey,
     shouldUpdateScroll: props.shouldUpdateScroll,
     statusIds: getStatusIds(state, props),
