@@ -1,6 +1,25 @@
 # frozen_string_literal: true
 
 namespace :mastodon do
+  desc 'Benchmark FeedManager.instance.push_bulk'
+  task benchmark: :environment do
+    require 'faker'
+
+    accounts = Account.all
+    status = Fabricate.build(:status)
+
+    p accounts.size
+
+    Redis.current.flushdb
+    Account.limit(1000).each { |account| Redis.current.set("subscribed:timeline:#{account.id}", '1') }
+
+    Benchmark.bm do|benchmark|
+      benchmark.report('push_bulk') do
+        FeedManager.instance.push_bulk(:home, accounts, status)
+      end
+    end
+  end
+
   desc 'Execute daily tasks'
   task :daily do
     %w(
