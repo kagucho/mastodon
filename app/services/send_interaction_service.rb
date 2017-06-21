@@ -12,17 +12,13 @@ class SendInteractionService < BaseService
 
     return if block_notification?
 
-    envelope = salmon.pack(@xml, @source_account.keypair)
-    salmon.post(@target_account.salmon_url, envelope)
+    envelope = OStatus2::Salmon::MagicEnvelope.new(@xml, @source_account.keypair)
+    OStatus2::Salmon::MagicEnvelope.post_xml(@target_account.salmon_url, envelope.to_xml)
   end
 
   private
 
   def block_notification?
     DomainBlock.blocked?(@target_account.domain)
-  end
-
-  def salmon
-    @salmon ||= OStatus2::Salmon.new
   end
 end

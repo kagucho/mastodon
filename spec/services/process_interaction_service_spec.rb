@@ -9,7 +9,7 @@ RSpec.describe ProcessInteractionService do
 
   describe 'status delete slap' do
     let(:remote_status) { Fabricate(:status, account: remote_sender) }
-    let(:envelope) { OStatus2::Salmon.new.pack(payload, sender.keypair) }
+    let(:envelope) { OStatus2::Salmon::MagicEnvelope.new(payload, sender.keypair).to_xml }
     let(:payload) {
       <<~XML
         <entry xmlns="http://www.w3.org/2005/Atom" xmlns:activity="http://activitystrea.ms/spec/1.0/">
@@ -52,7 +52,7 @@ RSpec.describe ProcessInteractionService do
 </entry>
 XML
 
-      envelope = OStatus2::Salmon.new.pack(payload, sender.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(payload, sender.keypair).to_xml
       subject.call(envelope, receiver)
     end
 
@@ -80,7 +80,7 @@ XML
 </entry>
 XML
 
-      envelope = OStatus2::Salmon.new.pack(payload, remote_sender.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(payload, remote_sender.keypair).to_xml
       subject.call(envelope, receiver)
     end
 
@@ -106,7 +106,7 @@ XML
 </entry>
 XML
 
-      envelope = OStatus2::Salmon.new.pack(payload, receiver.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(payload, receiver.keypair).to_xml
       subject.call(envelope, sender)
     end
 
@@ -136,7 +136,7 @@ XML
 </entry>
 XML
 
-      envelope = OStatus2::Salmon.new.pack(payload, receiver.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(payload, receiver.keypair).to_xml
       subject.call(envelope, sender)
     end
 

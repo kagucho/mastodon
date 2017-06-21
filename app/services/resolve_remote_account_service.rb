@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResolveRemoteAccountService < BaseService
-  include OStatus2::MagicKey
   include HttpHelper
 
   DFRN_NS = 'http://purl.org/macgirvin/dfrn/1.0'
@@ -48,12 +47,14 @@ class ResolveRemoteAccountService < BaseService
       account = confirmed_account
     end
 
+    magic_public_key = OStatus2::Salmon::MagicPublicKey.new(data.link('magic-public-key').href)
+
     account.last_webfingered_at = Time.now.utc
 
     account.remote_url  = data.link('http://schemas.google.com/g/2010#updates-from').href
     account.salmon_url  = data.link('salmon').href
     account.url         = data.link('http://webfinger.net/rel/profile-page').href
-    account.public_key  = magic_key_to_pem(data.link('magic-public-key').href)
+    account.public_key  = OpenSSL::PKey::RSA.new.set_key(magic_public_key.n, magic_public_key.e, nil).to_pem
 
     body, xml = get_feed(account.remote_url)
     hubs      = get_hubs(xml)

@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/kagucho/ostatus2.git
+  revision: ab9c01862121f100aadde4a88a3f5d1d72eb5364
+  specs:
+    ostatus2 (2.0.1)
+      addressable (~> 2.4)
+      http (~> 2.0)
+      nokogiri (~> 1.6)
+      openssl (~> 2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -249,13 +259,8 @@ GEM
     nokogumbo (1.4.13)
       nokogiri
     oj (3.1.0)
-    openssl (2.0.3)
+    openssl (2.0.4)
     orm_adapter (0.5.0)
-    ostatus2 (2.0.1)
-      addressable (~> 2.4)
-      http (~> 2.0)
-      nokogiri (~> 1.6)
-      openssl (~> 2.0)
     ox (2.5.0)
     paperclip (5.1.0)
       activemodel (>= 4.2.0)
@@ -516,7 +521,7 @@ DEPENDENCIES
   microformats2 (~> 3.0)
   nokogiri (~> 1.7)
   oj (~> 3.0)
-  ostatus2 (~> 2.0)
+  ostatus2 (~> 2.0)!
   ox (~> 2.5)
   paperclip (~> 5.1)
   paperclip-av-transcoder (~> 0.6)

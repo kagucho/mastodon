@@ -5,10 +5,11 @@ class ProcessInteractionService < BaseService
   include Authorization
 
   # Record locally the remote interaction with our user
-  # @param [String] envelope Salmon envelope
+  # @param [String] xml Salmon envelope
   # @param [Account] target_account Account the Salmon was addressed to
-  def call(envelope, target_account)
-    body = salmon.unpack(envelope)
+  def call(payload, target_account)
+    envelope = OStatus2::Salmon::MagicEnvelope.new(payload)
+    body = envelope.body
 
     xml = Nokogiri::XML(body)
     xml.encoding = 'utf-8'
@@ -17,7 +18,7 @@ class ProcessInteractionService < BaseService
 
     return if account.nil? || account.suspended?
 
-    if salmon.verify(envelope, account.keypair)
+    if envelope.verify(account.keypair)
       RemoteProfileUpdateWorker.perform_async(account.id, body.force_encoding('UTF-8'), true)
 
       case verb(xml)
@@ -47,7 +48,7 @@ class ProcessInteractionService < BaseService
         reflect_unblock!(account, target_account)
       end
     end
-  rescue Goldfinger::Error, HTTP::Error, OStatus2::BadSalmonError, Mastodon::NotPermittedError
+  rescue Goldfinger::Error, HTTP::Error, OStatus2::Salmon::MagicEnvelope::BadError, Mastodon::NotPermittedError
     nil
   end
 
@@ -139,9 +140,5 @@ class ProcessInteractionService < BaseService
 
   def activity_id(xml)
     xml.at_xpath('//activity:object', activity: TagManager::AS_XMLNS).at_xpath('./xmlns:id', xmlns: TagManager::XMLNS).content
-  end
-
-  def salmon
-    @salmon ||= OStatus2::Salmon.new
   end
 end

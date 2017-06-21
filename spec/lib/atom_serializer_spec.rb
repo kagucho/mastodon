@@ -784,7 +784,7 @@ RSpec.describe AtomSerializer do
       block = Fabricate(:block)
       block_salmon = AtomSerializer.new.block_salmon(block)
       xml = AtomSerializer.render(block_salmon)
-      envelope = OStatus2::Salmon.new.pack(xml, block.account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, block.account.keypair).to_xml
       block.destroy!
 
       ProcessInteractionService.new.call(envelope, block.target_account)
@@ -871,7 +871,7 @@ RSpec.describe AtomSerializer do
       block = Fabricate(:block)
       unblock_salmon = AtomSerializer.new.unblock_salmon(block)
       xml = AtomSerializer.render(unblock_salmon)
-      envelope = OStatus2::Salmon.new.pack(xml, block.account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, block.account.keypair).to_xml
 
       ProcessInteractionService.new.call(envelope, block.target_account)
 
@@ -964,7 +964,7 @@ RSpec.describe AtomSerializer do
       favourite = Fabricate(:favourite)
       favourite_salmon = AtomSerializer.new.favourite_salmon(favourite)
       xml = AtomSerializer.render(favourite_salmon)
-      envelope = OStatus2::Salmon.new.pack(xml, favourite.account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, favourite.account.keypair).to_xml
       favourite.destroy!
 
       ProcessInteractionService.new.call(envelope, favourite.status.account)
@@ -1064,7 +1064,7 @@ RSpec.describe AtomSerializer do
       favourite = Fabricate(:favourite)
       unfavourite_salmon = AtomSerializer.new.unfavourite_salmon(favourite)
       xml = AtomSerializer.render(unfavourite_salmon)
-      envelope = OStatus2::Salmon.new.pack(xml, favourite.account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, favourite.account.keypair).to_xml
 
       ProcessInteractionService.new.call(envelope, favourite.status.account)
       expect { favourite.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -1144,7 +1144,7 @@ RSpec.describe AtomSerializer do
       follow_salmon = AtomSerializer.new.follow_salmon(follow)
       xml = AtomSerializer.render(follow_salmon)
       follow.destroy!
-      envelope = OStatus2::Salmon.new.pack(xml, follow.account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, follow.account.keypair).to_xml
 
       ProcessInteractionService.new.call(envelope, follow.target_account)
 
@@ -1253,7 +1253,7 @@ RSpec.describe AtomSerializer do
       unfollow_salmon = AtomSerializer.new.unfollow_salmon(follow)
       xml = AtomSerializer.render(unfollow_salmon)
       follow.account.follow!(follow.target_account)
-      envelope = OStatus2::Salmon.new.pack(xml, follow.account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, follow.account.keypair).to_xml
 
       ProcessInteractionService.new.call(envelope, follow.target_account)
 
@@ -1294,10 +1294,10 @@ RSpec.describe AtomSerializer do
         follow_request = Fabricate(:follow_request)
         follow_request_salmon = serialize(follow_request)
         xml = AtomSerializer.render(follow_request_salmon)
-        envelope = OStatus2::Salmon.new.pack(xml, follow_request.account.keypair)
+        envelope = OStatus2::Salmon::MagicEnvelope.new(xml, follow_request.account.keypair)
         follow_request.destroy!
 
-        ProcessInteractionService.new.call(envelope, follow_request.target_account)
+        ProcessInteractionService.new.call(envelope.to_xml, follow_request.target_account)
 
         expect(follow_request.account.requested?(follow_request.target_account)).to eq true
       end
@@ -1364,7 +1364,7 @@ RSpec.describe AtomSerializer do
       follow_request = Fabricate(:follow_request)
       authorize_follow_request_salmon = AtomSerializer.new.authorize_follow_request_salmon(follow_request)
       xml = AtomSerializer.render(authorize_follow_request_salmon)
-      envelope = OStatus2::Salmon.new.pack(xml, follow_request.target_account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, follow_request.target_account.keypair).to_xml
 
       ProcessInteractionService.new.call(envelope, follow_request.account)
 
@@ -1427,7 +1427,7 @@ RSpec.describe AtomSerializer do
       follow_request = Fabricate(:follow_request)
       reject_follow_request_salmon = AtomSerializer.new.reject_follow_request_salmon(follow_request)
       xml = AtomSerializer.render(reject_follow_request_salmon)
-      envelope = OStatus2::Salmon.new.pack(xml, follow_request.target_account.keypair)
+      envelope = OStatus2::Salmon::MagicEnvelope.new(xml, follow_request.target_account.keypair).to_xml
 
       ProcessInteractionService.new.call(envelope, follow_request.account)
 

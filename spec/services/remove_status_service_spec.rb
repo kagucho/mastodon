@@ -33,8 +33,8 @@ RSpec.describe RemoveStatusService do
 
   it 'sends Salmon slap to previously mentioned users' do
     expect(a_request(:post, "http://example.com/salmon").with { |req|
-      xml = OStatus2::Salmon.new.unpack(req.body)
-      xml.match(TagManager::VERBS[:delete])
+      envelope = OStatus2::Salmon::MagicEnvelope.new(req.body)
+      envelope.body.match(TagManager::VERBS[:delete])
     }).to have_been_made.once
   end
 end
