@@ -7,6 +7,9 @@ class FeedManager
 
   MAX_ITEMS = 400
 
+  # An approximation of the number of statuses per 14 days
+  MIN_ID_RANGE = 2_097_152
+
   def key(type, id)
     "feed:#{type}:#{id}"
   end

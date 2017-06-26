@@ -14,6 +14,9 @@ class Api::V1::Timelines::HomeController < Api::BaseController
 
   private
 
+  # An approximation of the number of statuses per day
+  RANGE_REQUEST_MAX_ID_RANGE = 262_144
+
   def load_statuses
     cached_home_statuses
   end
@@ -23,10 +26,23 @@ class Api::V1::Timelines::HomeController < Api::BaseController
   end
 
   def home_statuses
+    max_id = params[:max_id]&.to_i
+    since_id = params[:since_id]&.to_i
+
+    if max_id.nil? && since_id.nil?
+      since_id = Status.first.id - FeedManager::MIN_ID_RANGE
+    elsif max_id.nil? && since_id.present?
+      max_id = since_id + RANGE_REQUEST_MAX_ID_RANGE
+    elsif max_id.present? && since_id.nil?
+      since_id = max_id - RANGE_REQUEST_MAX_ID_RANGE
+    elsif max_id - since_id > RANGE_REQUEST_MAX_ID_RANGE
+      raise Mastodon::ValidationError, 'Too broad range for ID'
+    end
+
     account_home_feed.get(
       limit_param(DEFAULT_STATUSES_LIMIT),
-      params[:max_id],
-      params[:since_id]
+      max_id,
+      since_id
     )
   end
 

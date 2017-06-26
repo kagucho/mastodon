@@ -34,7 +34,7 @@ class PrecomputeFeedService < BaseService
   end
 
   def statuses
-    Status.as_home_timeline(account).order(account_id: :desc).limit(LIMIT)
+    Status.as_home_timeline(account).order(account_id: :desc).paginate_by_max_id(LIMIT, nil, Status.last.id - FeedManager::MIN_ID_RANGE)
   end
 
   def redis
