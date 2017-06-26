@@ -36,7 +36,7 @@ class FanOutOnWriteService < BaseService
   def deliver_to_followers(status)
     Rails.logger.debug "Delivering status #{status.id} to followers"
 
-    status.account.followers.where(domain: nil).joins(:user).where('users.current_sign_in_at > ?', 14.days.ago).select(:id).reorder(nil).find_in_batches do |followers|
+    status.account.followers.where(domain: nil).joins(:user).where('users.current_sign_in_at > ?', User::FEED_UPDATED_DURATION.ago).select(:id).reorder(nil).find_in_batches do |followers|
       FeedInsertWorker.push_bulk(followers) do |follower|
         [status.id, follower.id]
       end

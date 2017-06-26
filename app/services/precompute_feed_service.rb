@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class PrecomputeFeedService < BaseService
-  LIMIT = FeedManager::MAX_ITEMS / 4
-
   def call(account)
     @account = account
     populate_feed
@@ -19,6 +17,8 @@ class PrecomputeFeedService < BaseService
       redis.zadd(account_home_key, pairs) if pairs.any?
       redis.del("account:#{@account.id}:regeneration")
     end
+
+    FeedManager.instance.trim(:home, account.id) if account.user.continuously_active?
   end
 
   def process_status(status)
@@ -34,7 +34,23 @@ class PrecomputeFeedService < BaseService
   end
 
   def statuses
-    Status.as_home_timeline(account).order(account_id: :desc).paginate_by_max_id(LIMIT, nil, Status.last.id - FeedManager::MIN_ID_RANGE)
+    limit = nil
+    since_id = nil
+
+    if account.user.continuously_active?
+      # Limit with MAX_ITEMS to ensure the old feed and the new feed becomes
+      # continuous.
+      limit = FeedManager::MAX_ITEMS
+      since_id = account.user.last_updated_feed_status_id
+    else
+      last = Status.last
+      return [] if last.nil?
+
+      limit = FeedManager::MIN_ITEMS
+      since_id = last.id - FeedManager::MIN_ID_RANGE
+    end
+
+    Status.as_home_timeline(account).order(account_id: :desc).paginate_by_max_id(limit, nil, since_id)
   end
 
   def redis

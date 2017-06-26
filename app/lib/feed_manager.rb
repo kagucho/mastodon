@@ -6,6 +6,7 @@ class FeedManager
   include Singleton
 
   MAX_ITEMS = 400
+  MIN_ITEMS = 40
 
   # An approximation of the number of statuses per 14 days
   MIN_ID_RANGE = 2_097_152
@@ -30,7 +31,7 @@ class FeedManager
     if status.reblog?
       # If the original status is within 40 statuses from top, do not re-insert it into the feed
       rank = redis.zrevrank(timeline_key, status.reblog_of_id)
-      return if !rank.nil? && rank < 40
+      return if !rank.nil? && rank < MIN_ITEMS
       redis.zadd(timeline_key, status.id, status.reblog_of_id)
     else
       redis.zadd(timeline_key, status.id, status.id)

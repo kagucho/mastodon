@@ -34,17 +34,17 @@ describe ApplicationController, type: :controller do
       expect_updated_sign_in_at(user)
     end
 
-    it 'tracks when sign in is older than one day' do
-      user.update(current_sign_in_at: 2.days.ago)
+    it 'tracks when sign in is out of User::UPDATE_SIGN_IN_DURATION' do
+      user.update(current_sign_in_at: (User::UPDATE_SIGN_IN_DURATION + 1.day).ago)
       sign_in user, scope: :user
       get :show
 
       expect_updated_sign_in_at(user)
     end
 
-    it 'regenerates feed when sign in is older than two weeks' do
+    it 'regenerates feed when sign in is out of User::FEED_UPDATED_DURATION' do
       allow(RegenerationWorker).to receive(:perform_async)
-      user.update(current_sign_in_at: 3.weeks.ago)
+      user.update(current_sign_in_at: (User::FEED_UPDATED_DURATION + 1.day).ago)
       sign_in user, scope: :user
       get :show
 

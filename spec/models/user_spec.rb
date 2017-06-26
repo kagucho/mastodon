@@ -148,6 +148,34 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#continuously_active?' do
+    it 'returns false for users who does not have the current session' do
+      current_sign_in_at = User::ACTIVE_DURATION.ago - 1.day
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: current_sign_in_at)
+      expect(user.continuously_active?).to eq false
+    end
+
+    it 'returns false if the duration between the current session and the last one is longer than ACTIVE_DURATION' do
+      current_sign_in_at = Time.now
+      last_sign_in_at = current_sign_in_at - User::ACTIVE_DURATION
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: last_sign_in_at)
+      expect(user.continuously_active?).to eq false
+    end
+
+    it 'returns true for users who have signed in the last ACTIVE_DURATION and does not have the last session' do
+      current_sign_in_at = User::ACTIVE_DURATION.ago + 1.day
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: nil)
+      expect(user.continuously_active?).to eq true
+    end
+
+    it 'returns true if users who have signd in the last ACTIVE_DURATION and the duration between the current session and the last one is shorter than ACTIVE_DURATION' do
+      current_sign_in_at = User::ACTIVE_DURATION.ago + 1.day
+      last_sign_in_at = current_sign_in_at - User::ACTIVE_DURATION + 1.day
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: last_sign_in_at)
+      expect(user.continuously_active?).to eq true
+    end
+  end
+
   describe '#disable_two_factor!' do
     it 'saves false for otp_required_for_login' do
       user = Fabricate.build(:user, otp_required_for_login: true)
@@ -159,6 +187,28 @@ RSpec.describe User, type: :model do
       user = Fabricate.build(:user, otp_backup_codes: %w(dummy dummy))
       user.disable_two_factor!
       expect(user.reload.otp_backup_codes.empty?).to be true
+    end
+  end
+
+  describe '#last_updated_feed_status_id' do
+    it 'returns nil if the user has never signed in before' do
+      user = Fabricate(:user, last_sign_in_at: nil)
+      Fabricate(:status)
+      expect(user.last_updated_feed_status_id).to eq nil
+    end
+
+    it 'returns nil if there were no new statuses in the last update' do
+      user = Fabricate(:user, last_sign_in_at: Time.now)
+      expect(user.last_updated_feed_status_id).to eq nil
+    end
+
+    it 'returns the ID of the status of the last feed update if any' do
+      last_sign_in_at = User::FEED_UPDATED_DURATION.ago
+      first = Fabricate(:status, created_at: last_sign_in_at)
+      last = Fabricate(:status, created_at: last_sign_in_at + User::FEED_UPDATED_DURATION - 1.day)
+      new = Fabricate(:status, created_at: last_sign_in_at + User::FEED_UPDATED_DURATION)
+      user = Fabricate(:user, last_sign_in_at: last_sign_in_at)
+      expect(user.last_updated_feed_status_id).to eq last.id
     end
   end
 

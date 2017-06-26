@@ -36,6 +36,12 @@
 class User < ApplicationRecord
   include Settings::Extend
   ACTIVE_DURATION = 14.days
+  UPDATE_SIGN_IN_DURATION = 1.day
+
+  # FEED_UPDATED_DURATION must be greater than or equal to twice of
+  # UPDATE_SIGN_IN_DURATION, or feed updater could not tell feeds to update
+  # and those not to with current_sign_in_at.
+  FEED_UPDATED_DURATION = UPDATE_SIGN_IN_DURATION * 2
 
   devise :registerable, :recoverable,
          :rememberable, :trackable, :validatable, :confirmable,
@@ -69,10 +75,19 @@ class User < ApplicationRecord
     confirmed_at.present?
   end
 
+  def continuously_active?
+    current_sign_in_at.present? && current_sign_in_at > ACTIVE_DURATION.ago &&
+      (last_sign_in_at.nil? || last_sign_in_at > current_sign_in_at - ACTIVE_DURATION)
+  end
+
   def disable_two_factor!
     self.otp_required_for_login = false
     otp_backup_codes&.clear
     save!
+  end
+
+  def last_updated_feed_status_id
+    last_sign_in_at && Status.find_by('created_at < ?', last_sign_in_at + FEED_UPDATED_DURATION)&.id
   end
 
   def setting_default_privacy

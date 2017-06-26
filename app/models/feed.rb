@@ -11,7 +11,28 @@ class Feed
   # case, it retrieves ALL statuses before max_id.
   def get(limit, max_id, since_id)
     if redis.exists("account:#{@account.id}:regeneration")
-      from_database(limit, max_id, since_id)
+      if @account.user.continuously_active?
+        last_updated_id = @account.user.last_updated_feed_status_id
+
+        # This can retrieve statuses with id <= last_updated_id.
+        statuses_from_redis = from_redis(limit, max_id, since_id)
+
+        # This can retrieve statuses with id > last_updated_id.
+        statuses = from_database(limit, max_id, statuses_from_redis.first&.id || last_updated_id || since_id)
+
+        statuses += statuses_from_redis
+        statuses = statuses[0, limit]
+
+        # This can retrieve statuses with id < last_updated_id.
+        statuses += from_database(limit - statuses.size,
+                                  statuses_from_redis.last&.id || max_id || last_updated_id,
+                                  since_id)
+
+        # Sum of the above three queries.
+        statuses
+      else
+        from_database(limit, max_id, since_id)
+      end
     else
       statuses = from_redis(limit, max_id, since_id)
 
