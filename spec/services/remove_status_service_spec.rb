@@ -18,11 +18,11 @@ RSpec.describe RemoveStatusService do
   end
 
   it 'removes status from author\'s home feed' do
-    expect(Feed.new(:home, alice).get(10)).to_not include(@status.id)
+    expect(Feed.new(:home, alice).get(10, nil, 0)).to_not include(@status.id)
   end
 
   it 'removes status from local follower\'s home feed' do
-    expect(Feed.new(:home, jeff).get(10)).to_not include(@status.id)
+    expect(Feed.new(:home, jeff).get(10, nil, 0)).to_not include(@status.id)
   end
 
   it 'sends PuSH update to PuSH subscribers' do

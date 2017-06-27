@@ -12,7 +12,7 @@ RSpec.describe Feed, type: :model do
                         [[4, 'deleted'], [3, 'val3'], [2, 'val2'], [1, 'val1']])
 
       feed = Feed.new(:home, account)
-      results = feed.get(3)
+      results = feed.get(3, nil, 0)
 
       expect(results.map(&:id)).to eq [3, 2]
       expect(results.first.attributes.keys).to eq %w(id updated_at)
