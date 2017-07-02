@@ -35,13 +35,17 @@
 
 class User < ApplicationRecord
   include Settings::Extend
-  ACTIVE_DURATION = 14.days
+
   UPDATE_SIGN_IN_DURATION = 1.day
 
   # FEED_UPDATED_DURATION must be greater than or equal to twice of
   # UPDATE_SIGN_IN_DURATION, or feed updater could not tell feeds to update
   # and those not to with current_sign_in_at.
   FEED_UPDATED_DURATION = UPDATE_SIGN_IN_DURATION * 2
+
+  # FEED_PERSISTENT_DURATION must be greater than or equal to
+  # FEED_UPDATED_DURATION.
+  FEED_PERSISTENT_DURATION = 14.days
 
   devise :registerable, :recoverable,
          :rememberable, :trackable, :validatable, :confirmable,
@@ -58,7 +62,7 @@ class User < ApplicationRecord
   scope :recent,    -> { order(id: :desc) }
   scope :admins,    -> { where(admin: true) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
-  scope :inactive, -> { where(arel_table[:current_sign_in_at].lt(ACTIVE_DURATION.ago)) }
+  scope :feed_expired, -> { where(arel_table[:current_sign_in_at].lt(FEED_PERSISTENT_DURATION.ago)) }
   scope :matches_email, ->(value) { where(arel_table[:email].matches("#{value}%")) }
   scope :with_recent_ip_address, ->(value) { where(arel_table[:current_sign_in_ip].eq(value).or(arel_table[:last_sign_in_ip].eq(value))) }
 
@@ -75,15 +79,15 @@ class User < ApplicationRecord
     confirmed_at.present?
   end
 
-  def continuously_active?
-    current_sign_in_at.present? && current_sign_in_at > ACTIVE_DURATION.ago &&
-      (last_sign_in_at.nil? || last_sign_in_at > current_sign_in_at - ACTIVE_DURATION)
-  end
-
   def disable_two_factor!
     self.otp_required_for_login = false
     otp_backup_codes&.clear
     save!
+  end
+
+  def feed_persistent?
+    current_sign_in_at.present? && current_sign_in_at > FEED_PERSISTENT_DURATION.ago &&
+      (last_sign_in_at.nil? || last_sign_in_at > current_sign_in_at - FEED_PERSISTENT_DURATION)
   end
 
   def last_updated_feed_status_id

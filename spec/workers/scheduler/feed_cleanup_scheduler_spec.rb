@@ -6,7 +6,7 @@ describe Scheduler::FeedCleanupScheduler do
   let!(:active_user) { Fabricate(:user, current_sign_in_at: 2.days.ago) }
   let!(:inactive_user) { Fabricate(:user, current_sign_in_at: 22.days.ago) }
 
-  it 'clears feeds of inactives' do
+  it 'clears expired feeds' do
     Redis.current.zadd(feed_key_for(inactive_user), 1, 1)
     Redis.current.zadd(feed_key_for(active_user), 1, 1)
 

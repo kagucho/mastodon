@@ -18,7 +18,7 @@ class PrecomputeFeedService < BaseService
       redis.del("account:#{@account.id}:regeneration")
     end
 
-    FeedManager.instance.trim(:home, account.id) if account.user.continuously_active?
+    FeedManager.instance.trim(:home, account.id) if account.user.feed_persistent?
   end
 
   def process_status(status)
@@ -37,7 +37,7 @@ class PrecomputeFeedService < BaseService
     limit = nil
     since_id = nil
 
-    if account.user.continuously_active?
+    if account.user.feed_persistent?
       # Limit with MAX_ITEMS to ensure the old feed and the new feed becomes
       # continuous.
       limit = FeedManager::MAX_ITEMS

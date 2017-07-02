@@ -72,12 +72,12 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe 'inactive' do
-      it 'returns a relation of inactive users' do
+    describe 'feed_expired' do
+      it 'returns a relation of users with expired feeds' do
         specified = Fabricate(:user, current_sign_in_at: 15.days.ago)
         Fabricate(:user, current_sign_in_at: 13.days.ago)
 
-        expect(User.inactive).to match_array([specified])
+        expect(User.feed_expired).to match_array([specified])
       end
     end
 
@@ -148,34 +148,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#continuously_active?' do
-    it 'returns false for users who does not have the current session' do
-      current_sign_in_at = User::ACTIVE_DURATION.ago - 1.day
-      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: current_sign_in_at)
-      expect(user.continuously_active?).to eq false
-    end
-
-    it 'returns false if the duration between the current session and the last one is longer than ACTIVE_DURATION' do
-      current_sign_in_at = Time.now
-      last_sign_in_at = current_sign_in_at - User::ACTIVE_DURATION
-      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: last_sign_in_at)
-      expect(user.continuously_active?).to eq false
-    end
-
-    it 'returns true for users who have signed in the last ACTIVE_DURATION and does not have the last session' do
-      current_sign_in_at = User::ACTIVE_DURATION.ago + 1.day
-      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: nil)
-      expect(user.continuously_active?).to eq true
-    end
-
-    it 'returns true if users who have signd in the last ACTIVE_DURATION and the duration between the current session and the last one is shorter than ACTIVE_DURATION' do
-      current_sign_in_at = User::ACTIVE_DURATION.ago + 1.day
-      last_sign_in_at = current_sign_in_at - User::ACTIVE_DURATION + 1.day
-      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: last_sign_in_at)
-      expect(user.continuously_active?).to eq true
-    end
-  end
-
   describe '#disable_two_factor!' do
     it 'saves false for otp_required_for_login' do
       user = Fabricate.build(:user, otp_required_for_login: true)
@@ -187,6 +159,34 @@ RSpec.describe User, type: :model do
       user = Fabricate.build(:user, otp_backup_codes: %w(dummy dummy))
       user.disable_two_factor!
       expect(user.reload.otp_backup_codes.empty?).to be true
+    end
+  end
+
+  describe '#feed_persistent?' do
+    it 'returns false for users who does not have the current session' do
+      current_sign_in_at = User::FEED_PERSISTENT_DURATION.ago - 1.day
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: current_sign_in_at)
+      expect(user.feed_persistent?).to eq false
+    end
+
+    it 'returns false if the duration between the current session and the last one is longer than FEED_PERSISTENT_DURATION' do
+      current_sign_in_at = Time.now
+      last_sign_in_at = current_sign_in_at - User::FEED_PERSISTENT_DURATION
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: last_sign_in_at)
+      expect(user.feed_persistent?).to eq false
+    end
+
+    it 'returns true for users who have signed in the last FEED_PERSISTENT_DURATION and does not have the last session' do
+      current_sign_in_at = User::FEED_PERSISTENT_DURATION.ago + 1.day
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: nil)
+      expect(user.feed_persistent?).to eq true
+    end
+
+    it 'returns true if users who have signd in the last FEED_PERSISTENT_DURATION and the duration between the current session and the last one is shorter than FEED_PERSISTENT_DURATION' do
+      current_sign_in_at = User::FEED_PERSISTENT_DURATION.ago + 1.day
+      last_sign_in_at = current_sign_in_at - User::FEED_PERSISTENT_DURATION + 1.day
+      user = Fabricate(:user, current_sign_in_at: current_sign_in_at, last_sign_in_at: last_sign_in_at)
+      expect(user.feed_persistent?).to eq true
     end
   end
 

@@ -11,7 +11,7 @@ class Feed
   # case, it retrieves ALL statuses before max_id.
   def get(limit, max_id, since_id)
     if redis.exists("account:#{@account.id}:regeneration")
-      if @account.user.continuously_active?
+      if @account.user.feed_persistent?
         last_updated_id = @account.user.last_updated_feed_status_id
 
         # This can retrieve statuses with id <= last_updated_id.
