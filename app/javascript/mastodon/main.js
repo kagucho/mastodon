@@ -1,5 +1,6 @@
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 import * as WebPushSubscription from './web_push_subscription';
+import Base from 'mastodon/containers/base';
 import Mastodon from 'mastodon/containers/mastodon';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -22,7 +23,10 @@ function main() {
     const mountNode = document.getElementById('mastodon');
     const props = JSON.parse(mountNode.getAttribute('data-props'));
 
-    ReactDOM.render(<Mastodon {...props} />, mountNode);
+    ReactDOM.render(<Base {...props}><Mastodon /></Base>, mountNode);
+
+    require('./protocol_handler').register();
+
     if (process.env.NODE_ENV === 'production') {
       // avoid offline in dev mode because it's harder to debug
       OfflinePluginRuntime.install();

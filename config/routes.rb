@@ -79,6 +79,10 @@ Rails.application.routes.draw do
   resources :media, only: [:show]
   resources :tags,  only: [:show]
 
+  namespace :intents do
+    resources :statuses
+  end
+
   # Remote follow
   resource :authorize_follow, only: [:show, :create]
 
@@ -113,6 +117,9 @@ Rails.application.routes.draw do
   get '/admin', to: redirect('/admin/settings/edit', status: 302)
 
   namespace :api do
+    # Activity Streams intent extension
+    get '/users/:id/activity_intents/follow', to: 'activity_intents#follow', defaults: { format: :activitystreams2 }, as: :activity_intents_follow
+
     # PubSubHubbub outgoing subscriptions
     resources :subscriptions, only: [:show]
     post '/subscriptions/:id', to: 'subscriptions#update'
@@ -213,6 +220,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get '/process_activity', to: 'process_activity#show'
 
   get '/web/(*any)', to: 'home#index', as: :web
 

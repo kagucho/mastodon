@@ -8,6 +8,9 @@
   %link{ rel: 'salmon', href: api_salmon_url(@account.id) }/
   %link{ rel: 'alternate', type: 'application/atom+xml', href: account_url(@account, format: 'atom') }/
 
+  = javascript_pack_tag 'account', integrity: true, crossorigin: 'anonymous'
+  %script#account_follow_intent{ type: 'text/plain' } web+activity+#{api_activity_intents_follow_url(@account.username)}
+
   %meta{ property: 'og:type', content: 'profile' }/
   = render 'og', account: @account, url: short_account_url(@account, only_path: false)
 

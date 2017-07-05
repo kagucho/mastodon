@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { store } from './containers/mastodon';
+import { store } from './containers/base';
 import { setBrowserSupport, setSubscription, clearSubscription } from './actions/push_notifications';
 
 // Taken from https://www.npmjs.com/package/web-push

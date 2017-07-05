@@ -1,7 +1,6 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import configureStore from '../store/configureStore';
 import {
   updateTimeline,
   deleteFromTimelines,
@@ -15,32 +14,31 @@ import BrowserRouter from 'react-router-dom/BrowserRouter';
 import Route from 'react-router-dom/Route';
 import ScrollContext from 'react-router-scroll/lib/ScrollBehaviorContext';
 import UI from '../features/ui';
-import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
-import { IntlProvider, addLocaleData } from 'react-intl';
-import { getLocale } from '../locales';
-const { localeData, messages } = getLocale();
-addLocaleData(localeData);
+import { injectIntl } from 'react-intl';
 
-export const store = configureStore();
-const hydrateAction = hydrateStore(JSON.parse(document.getElementById('initial-state').textContent));
-store.dispatch(hydrateAction);
+const mapStateToProps = (state) => ({
+  streamingAPIBaseURL: state.getIn(['meta', 'streaming_api_base_url']),
+  accessToken: state.getIn(['meta', 'access_token']),
+});
 
+@connect(mapStateToProps)
+@injectIntl
 export default class Mastodon extends React.PureComponent {
-
   static propTypes = {
-    locale: PropTypes.string.isRequired,
+    accessToken: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
+    streamingAPIBaseURL: PropTypes.string.isRequired,
   };
 
   componentDidMount() {
-    const { locale }  = this.props;
-    const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
-    const accessToken = store.getState().getIn(['meta', 'access_token']);
+    const { accessToken, dispatch, intl, streamingAPIBaseURL }  = this.props;
 
     const setupPolling = () => {
       this.polling = setInterval(() => {
-        store.dispatch(refreshHomeTimeline());
-        store.dispatch(refreshNotifications());
+        dispatch(refreshHomeTimeline());
+        dispatch(refreshNotifications());
       }, 20000);
     };
 
@@ -53,33 +51,33 @@ export default class Mastodon extends React.PureComponent {
 
       connected () {
         clearPolling();
-        store.dispatch(connectTimeline('home'));
+        dispatch(connectTimeline('home'));
       },
 
       disconnected () {
         setupPolling();
-        store.dispatch(disconnectTimeline('home'));
+        dispatch(disconnectTimeline('home'));
       },
 
       received (data) {
         switch(data.event) {
         case 'update':
-          store.dispatch(updateTimeline('home', JSON.parse(data.payload)));
+          dispatch(updateTimeline('home', JSON.parse(data.payload)));
           break;
         case 'delete':
-          store.dispatch(deleteFromTimelines(data.payload));
+          dispatch(deleteFromTimelines(data.payload));
           break;
         case 'notification':
-          store.dispatch(updateNotifications(JSON.parse(data.payload), messages, locale));
+          dispatch(updateNotifications(JSON.parse(data.payload), messages, intl.locale));
           break;
         }
       },
 
       reconnected () {
         clearPolling();
-        store.dispatch(connectTimeline('home'));
-        store.dispatch(refreshHomeTimeline());
-        store.dispatch(refreshNotifications());
+        dispatch(connectTimeline('home'));
+        dispatch(refreshHomeTimeline());
+        dispatch(refreshNotifications());
       },
 
     });
@@ -89,7 +87,7 @@ export default class Mastodon extends React.PureComponent {
       Notification.requestPermission();
     }
 
-    store.dispatch(showOnboardingOnce());
+    dispatch(showOnboardingOnce());
   }
 
   componentWillUnmount () {
@@ -104,20 +102,13 @@ export default class Mastodon extends React.PureComponent {
     }
   }
 
-  render () {
-    const { locale } = this.props;
-
+  render() {
     return (
-      <IntlProvider locale={locale} messages={messages}>
-        <Provider store={store}>
-          <BrowserRouter basename='/web'>
-            <ScrollContext>
-              <Route path='/' component={UI} />
-            </ScrollContext>
-          </BrowserRouter>
-        </Provider>
-      </IntlProvider>
+      <BrowserRouter basename='/web'>
+        <ScrollContext>
+          <Route path='/' component={UI} />
+        </ScrollContext>
+      </BrowserRouter>
     );
   }
-
 }
