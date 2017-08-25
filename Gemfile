@@ -76,6 +76,10 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.6'
 end
 
+group :production, :test do
+  gem 'redis-rails', '~> 5.0'
+end
+
 group :test do
   gem 'capybara', '~> 2.14'
   gem 'climate_control', '~> 0.2'
@@ -109,5 +113,4 @@ end
 
 group :production do
   gem 'lograge', '~> 0.5'
-  gem 'redis-rails', '~> 5.0'
 end
