@@ -68,6 +68,10 @@ class User < ApplicationRecord
 
   has_many :session_activations, dependent: :destroy
 
+  ConfirmedCountCache = CountCache.new(self, :confirmed, :confirmed_at) do |value|
+    value.present?
+  end
+
   def confirmed?
     confirmed_at.present?
   end

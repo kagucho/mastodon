@@ -75,6 +75,8 @@ class Status < ApplicationRecord
 
   cache_associated :account, :application, :media_attachments, :tags, :stream_entry, mentions: :account, reblog: [:account, :application, :stream_entry, :tags, :media_attachments, mentions: :account], thread: :account
 
+  LocalCountCache = CountCache.new(self, :local, :uri) { |value| value.nil? }
+
   delegate :domain, to: :account, prefix: true
 
   def reply?

@@ -7,6 +7,32 @@ RSpec.describe Status, type: :model do
 
   subject { Fabricate(:status, account: alice) }
 
+  describe 'LocalCountCache' do
+    it 'decrements the count after the destruction of a local status' do
+      status = Fabricate(:status, uri: nil)
+      expect(Status::LocalCountCache.fetch).to eq 1
+
+      status.destroy!
+      expect(Status::LocalCountCache.fetch).to eq 0
+    end
+
+    it 'decrements the count after the URI of a status gets set' do
+      status = Fabricate(:status, uri: nil)
+      expect(Status::LocalCountCache.fetch).to eq 1
+
+      status.update!(uri: 'a')
+      expect(Status::LocalCountCache.fetch).to eq 0
+    end
+
+    it 'increments the count after the URI of a status gets cleared' do
+      status = Fabricate(:status, uri: 'a')
+      expect(Status::LocalCountCache.fetch).to eq 0
+
+      status.update!(uri: nil)
+      expect(Status::LocalCountCache.fetch).to eq 1
+    end
+  end
+
   describe '#local?' do
     it 'returns true when no remote URI is set' do
       expect(subject.local?).to be true

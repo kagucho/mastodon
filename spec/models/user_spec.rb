@@ -4,6 +4,32 @@ require 'devise_two_factor/spec_helpers'
 RSpec.describe User, type: :model do
   it_behaves_like 'two_factor_backupable'
 
+  describe 'ConfirmedCountCache' do
+    it 'decrements the count after the destruction of a confirmed user' do
+      user = Fabricate(:user, confirmed_at: Time.now)
+      expect(User::ConfirmedCountCache.fetch).to eq 1
+
+      user.destroy!
+      expect(User::ConfirmedCountCache.fetch).to eq 0
+    end
+
+    it 'increments the count after confirmed_at of a user gets set' do
+      user = Fabricate(:user, confirmed_at: nil)
+      expect(User::ConfirmedCountCache.fetch).to eq 0
+
+      user.update!(confirmed_at: Time.now)
+      expect(User::ConfirmedCountCache.fetch).to eq 1
+    end
+
+    it 'decrements the count after confirmed_at of a user gets cleared' do
+      user = Fabricate(:user, confirmed_at: Time.now)
+      expect(User::ConfirmedCountCache.fetch).to eq 1
+
+      user.update!(confirmed_at: nil)
+      expect(User::ConfirmedCountCache.fetch).to eq 0
+    end
+  end
+
   describe 'otp_secret' do
     it 'is encrypted with OTP_SECRET environment variable' do
       user = Fabricate(:user,

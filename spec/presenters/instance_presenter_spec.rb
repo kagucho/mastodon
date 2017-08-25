@@ -90,21 +90,15 @@ describe InstancePresenter do
 
   describe "user_count" do
     it "returns the number of site users" do
-      cache = double
-      allow(Rails).to receive(:cache).and_return(cache)
-      allow(cache).to receive(:fetch).with("user_count").and_return(123)
-
-      expect(instance_presenter.user_count).to eq(123)
+      Fabricate(:user, confirmed_at: Time.now)
+      expect(instance_presenter.user_count).to eq(1)
     end
   end
 
   describe "status_count" do
     it "returns the number of local statuses" do
-      cache = double
-      allow(Rails).to receive(:cache).and_return(cache)
-      allow(cache).to receive(:fetch).with("local_status_count").and_return(234)
-
-      expect(instance_presenter.status_count).to eq(234)
+      Fabricate(:status, uri: nil)
+      expect(instance_presenter.status_count).to eq(1)
     end
   end
 

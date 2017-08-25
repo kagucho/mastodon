@@ -17,11 +17,11 @@ class InstancePresenter
   end
 
   def user_count
-    Rails.cache.fetch('user_count') { User.confirmed.count }
+    User::ConfirmedCountCache.fetch
   end
 
   def status_count
-    Rails.cache.fetch('local_status_count') { Status.local.count }
+    Status::LocalCountCache.fetch
   end
 
   def domain_count
