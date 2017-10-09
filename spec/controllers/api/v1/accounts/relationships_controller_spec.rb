@@ -49,20 +49,19 @@ describe Api::V1::Accounts::RelationshipsController do
       it 'returns JSON with correct data' do
         json = body_as_json
 
-        expect(json).to be_a Enumerable
-        expect(json.first[:id]).to eq simon.id.to_s
-        expect(json.first[:following]).to be true
-        expect(json.first[:followed_by]).to be false
-        expect(json.first[:muting]).to be false
-        expect(json.first[:requested]).to be false
-        expect(json.first[:domain_blocking]).to be false
+        simon_json = json.find { |element| element[:id] == simon.id.to_s }
+        expect(simon_json[:following]).to be true
+        expect(simon_json[:followed_by]).to be false
+        expect(simon_json[:muting]).to be false
+        expect(simon_json[:requested]).to be false
+        expect(simon_json[:domain_blocking]).to be false
 
-        expect(json.second[:id]).to eq lewis.id.to_s
-        expect(json.second[:following]).to be false
-        expect(json.second[:followed_by]).to be true
-        expect(json.second[:muting]).to be false
-        expect(json.second[:requested]).to be false
-        expect(json.second[:domain_blocking]).to be false
+        lewis_json = json.find { |element| element[:id] == lewis.id.to_s }
+        expect(lewis_json[:following]).to be false
+        expect(lewis_json[:followed_by]).to be true
+        expect(lewis_json[:muting]).to be false
+        expect(lewis_json[:requested]).to be false
+        expect(lewis_json[:domain_blocking]).to be false
       end
     end
   end
