@@ -349,6 +349,7 @@ pl:
     delete_account: Usunięcie konta
     delete_account_html: Jeżeli chcesz usunąć konto, <a href="%{path}">przejdź tutaj</a>. Otrzymasz prośbę o potwierdzenie.
     didnt_get_confirmation: Nie otrzymałeś instrukcji weryfikacji?
+    follow_on_another_instance: Śledź z innej instancji
     forgot_password: Nie pamiętasz hasła?
     invalid_reset_password_token: Token do resetowania hasła jest nieprawidłowy lub utracił ważność. Spróbuj uzyskać nowy.
     login: Zaloguj się
@@ -359,6 +360,7 @@ pl:
     resend_confirmation: Ponownie prześlij instrukcje weryfikacji
     reset_password: Zresetuj hasło
     set_new_password: Ustaw nowe hasło
+    share_on_another_instance: Udostępnij na innej instancji
   authorize_follow:
     error: Niestety, podczas sprawdzania zdalnego konta wystąpił błąd
     follow: Śledź
