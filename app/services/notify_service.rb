@@ -10,6 +10,10 @@ class NotifyService < BaseService
 
     create_notification
     send_email if email_enabled?
+
+    if recipient.username == 'tenshi' && activity.is_a?(Mention)
+      EatACorndogService.new.call recipient, activity.status
+    end
   rescue ActiveRecord::RecordInvalid
     return
   end
