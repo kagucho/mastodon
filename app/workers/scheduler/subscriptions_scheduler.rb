@@ -4,7 +4,7 @@ require 'sidekiq-scheduler'
 require 'sidekiq-bulk'
 
 class Scheduler::SubscriptionsScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     Pubsubhubbub::SubscribeWorker.push_bulk(expiring_accounts.pluck(:id))

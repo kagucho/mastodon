@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DigestMailerWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   sidekiq_options queue: 'mailers'
 

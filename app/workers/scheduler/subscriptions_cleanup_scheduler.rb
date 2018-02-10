@@ -3,7 +3,7 @@
 require 'sidekiq-scheduler'
 
 class Scheduler::SubscriptionsCleanupScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     Subscription.expired.in_batches.delete_all

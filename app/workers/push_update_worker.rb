@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PushUpdateWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform(account_id, status_id, timeline_id = nil)
     account     = Account.find(account_id)

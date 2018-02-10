@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AfterRemoteFollowRequestWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   sidekiq_options queue: 'pull', retry: 5
 

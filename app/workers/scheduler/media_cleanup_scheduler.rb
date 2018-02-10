@@ -2,7 +2,7 @@
 require 'sidekiq-scheduler'
 
 class Scheduler::MediaCleanupScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     unattached_media.find_each(&:destroy)

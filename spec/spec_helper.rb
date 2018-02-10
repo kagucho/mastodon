@@ -1,6 +1,9 @@
+require 'redis-namespace'
 require 'simplecov'
 
 GC.disable
+
+Redis.current = Redis::Namespace.new("mastodon_test#{ENV['TEST_ENV_NUMBER']}", redis: Redis.current)
 
 SimpleCov.start 'rails' do
   add_group 'Services', 'app/services'
@@ -25,9 +28,13 @@ RSpec.configure do |config|
     end
   end
 
+  config.after :each do
+    keys = Redis.current.keys
+    Redis.current.del(keys) if keys.any?
+  end
+
   config.after :suite do
     gc_counter = 0
-    FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
   end
 
   config.after :each do

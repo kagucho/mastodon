@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RefollowWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   sidekiq_options queue: 'pull', retry: false
 

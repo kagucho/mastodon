@@ -2,7 +2,7 @@
 require 'sidekiq-scheduler'
 
 class Scheduler::IpCleanupScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     time_ago = 5.years.ago

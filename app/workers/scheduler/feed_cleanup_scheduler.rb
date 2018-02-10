@@ -2,7 +2,7 @@
 require 'sidekiq-scheduler'
 
 class Scheduler::FeedCleanupScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     clean_home_feeds!

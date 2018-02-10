@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq_budget'
+
 namespace = ENV.fetch('REDIS_NAMESPACE') { nil }
 redis_params = { url: ENV['REDIS_URL'] }
 
@@ -14,3 +16,5 @@ end
 Sidekiq.configure_client do |config|
   config.redis = redis_params
 end
+
+SidekiqBudget.configure

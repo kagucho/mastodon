@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AuthorizeFollowWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform(source_account_id, target_account_id)
     source_account = Account.find(source_account_id)

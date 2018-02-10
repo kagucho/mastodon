@@ -3,7 +3,7 @@
 require 'csv'
 
 class ImportWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   sidekiq_options queue: 'pull', retry: false
 

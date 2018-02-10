@@ -2,7 +2,7 @@
 require 'sidekiq-scheduler'
 
 class Scheduler::UserCleanupScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     User.where('confirmed_at is NULL AND confirmation_sent_at <= ?', 2.days.ago).find_in_batches do |batch|

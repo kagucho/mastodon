@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Pubsubhubbub::SubscribeWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   sidekiq_options queue: 'push', retry: 10, unique: :until_executed, dead: false
 

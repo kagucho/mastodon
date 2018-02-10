@@ -2,6 +2,7 @@
 
 class Api::SalmonController < Api::BaseController
   before_action :set_account
+  limit_sidekiq_budget
   respond_to :txt
 
   def update

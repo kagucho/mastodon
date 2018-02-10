@@ -4,6 +4,7 @@ class ActivityPub::InboxesController < Api::BaseController
   include SignatureVerification
 
   before_action :set_account
+  limit_sidekiq_budget
 
   def create
     if signed_request_account

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class NotificationWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   sidekiq_options queue: 'push', retry: 5
 

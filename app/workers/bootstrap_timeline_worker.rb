@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BootstrapTimelineWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform(account_id)
     BootstrapTimelineService.new.call(Account.find(account_id))

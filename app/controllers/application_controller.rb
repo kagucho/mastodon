@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   force_ssl if: :https_enabled?
 
   include Localized
+  include SidekiqBudget::ControllerConcern
   include UserTrackingConcern
 
   helper_method :current_account

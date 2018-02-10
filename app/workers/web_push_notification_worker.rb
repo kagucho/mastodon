@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WebPushNotificationWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   sidekiq_options backtrace: true
 

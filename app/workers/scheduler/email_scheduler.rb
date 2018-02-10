@@ -2,7 +2,7 @@
 require 'sidekiq-scheduler'
 
 class Scheduler::EmailScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     eligible_users.find_each do |user|

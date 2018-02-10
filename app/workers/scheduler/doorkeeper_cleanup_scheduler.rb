@@ -2,7 +2,7 @@
 require 'sidekiq-scheduler'
 
 class Scheduler::DoorkeeperCleanupScheduler
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform
     Doorkeeper::AccessToken.where('revoked_at IS NOT NULL').where('revoked_at < NOW()').delete_all

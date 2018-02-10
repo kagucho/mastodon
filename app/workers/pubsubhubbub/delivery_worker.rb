@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Pubsubhubbub::DeliveryWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
   include RoutingHelper
 
   sidekiq_options queue: 'push', retry: 3, dead: false

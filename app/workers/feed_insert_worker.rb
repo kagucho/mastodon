@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FeedInsertWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform(status_id, id, type = :home)
     @type     = type.to_sym

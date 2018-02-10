@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DomainBlockWorker
-  include Sidekiq::Worker
+  include SidekiqBudget::Worker
 
   def perform(domain_block_id)
     BlockDomainService.new.call(DomainBlock.find(domain_block_id))

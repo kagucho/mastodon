@@ -8,6 +8,8 @@ class Api::V1::StatusesController < Api::BaseController
   before_action :require_user!, except:  [:show, :context, :card]
   before_action :set_status, only:       [:show, :context, :card]
 
+  limit_sidekiq_budget only: [:create]
+
   respond_to :json
 
   def show
