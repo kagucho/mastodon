@@ -30,12 +30,47 @@ class Rack::Attack
     end
   end
 
+  CALLBACK_PATHS = [
+    # /api/inbox, /api/:account_id:/inbox, and /api/salmon has lots of requests
+    # and should not be comprehensively throttled.
+
+    # fetches remote accounts
+    %r{/api/accounts/search},
+
+    # sends activities to remote accounts
+    %r{/api/account/.*?/follow},
+    %r{/api/account/.*?/unfollow},
+    %r{/api/account/.*?/block},
+    %r{/api/account/.*?/unblock},
+
+    # registers Pubsubhubbub callbacks
+    %r{/api/push},
+
+    # sends activities to remote accounts
+    %r{/api/v1/follow},
+    %r{/api/v1/follow_request/authorize},
+    %r{/api/v1/follow_request/reject},
+
+    # fetches remote accounts and statuses
+    %r{/api/v1/search},
+
+    # sends activities to remote accounts
+    %r{/api/v1/status/.*?/reblog},
+    %r{/api/v1/status/.*?/unreblog},
+    %r{/api/v1/status/.*?/favourite},
+    %r{/api/v1/status/.*?/unfavourite},
+
+    # fetches remote accounts
+    %r{/authorize_follow},
+  ].freeze
+
   PROTECTED_PATHS = %w(
     /auth/sign_in
     /auth
     /auth/password
   ).freeze
 
+  CALLBACK_PATHS_REGEX = Regexp.union(CALLBACK_PATHS.map { |path| /\A#{Regexp.escape(path)}/ })
   PROTECTED_PATHS_REGEX = Regexp.union(PROTECTED_PATHS.map { |path| /\A#{Regexp.escape(path)}/ })
 
   # Always allow requests from localhost
@@ -43,6 +78,10 @@ class Rack::Attack
   Rack::Attack.safelist('allow from localhost') do |req|
     # Requests are allowed if the return value is truthy
     '127.0.0.1' == req.ip || '::1' == req.ip
+  end
+
+  throttle('throttle_callback', limit: 300, period: 5.minutes) do |req|
+    req.path =~ CALLBACK_PATHS_REGEX
   end
 
   throttle('throttle_authenticated_api', limit: 300, period: 5.minutes) do |req|
