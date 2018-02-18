@@ -91,7 +91,6 @@ gl:
       moderation:
         all: Todo
         silenced: Acalado
-        suspended: Suspendido
         title: Moderación
       moderation_notes: Notas de moderación
       most_recent_activity: Actividade máis recente

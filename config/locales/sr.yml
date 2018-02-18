@@ -91,7 +91,6 @@ sr:
       moderation:
         all: Сви
         silenced: Ућуткани
-        suspended: Суспендовани
         title: Модерација
       moderation_notes: Модераторске белешке
       most_recent_activity: Најскорија активност

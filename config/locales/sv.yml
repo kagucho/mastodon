@@ -91,7 +91,6 @@ sv:
       moderation:
         all: Alla
         silenced: Tystas
-        suspended: Avstängd
         title: Moderering
       moderation_notes: Moderation anteckning
       most_recent_activity: Senaste aktivitet

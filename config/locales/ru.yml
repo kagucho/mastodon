@@ -91,7 +91,6 @@ ru:
       moderation:
         all: Все
         silenced: Заглушенные
-        suspended: Заблокированные
         title: Модерация
       moderation_notes: Заметки модератора
       most_recent_activity: Последняя активность

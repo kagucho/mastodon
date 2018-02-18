@@ -79,7 +79,7 @@ class OStatus::AtomSerializer
 
     if stream_entry.status.nil?
       append_element(entry, 'content', 'Deleted status')
-    elsif stream_entry.status.destroyed?
+    elsif stream_entry.status.destroyed? || stream_entry.status.account.hidden?
       append_element(entry, 'content', 'Deleted status')
       append_element(entry, 'link', nil, rel: :alternate, type: 'application/activity+json', href: ActivityPub::TagManager.instance.uri_for(stream_entry.status)) if stream_entry.account.local?
     else

@@ -90,8 +90,8 @@ ja:
       memorialize: 追悼アカウント化
       moderation:
         all: すべて
+        halted: 停止中
         silenced: サイレンス中
-        suspended: 停止中
         title: モデレーション
       moderation_notes: モデレーションメモ
       most_recent_activity: 直近の活動
@@ -149,14 +149,14 @@ ja:
         disable_user: "%{name} さんが %{target} さんのログインを無効化しました"
         enable_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を有効化しました"
         enable_user: "%{name} さんが %{target} さんのログインを有効化しました"
+        halt_account: "%{name} さんが %{target} さんを停止しました"
         memorialize_account: "%{name} さんが %{target} さんを追悼アカウントページに登録しました"
         promote_user: "%{name} さんが %{target} さんを昇格しました"
         reset_password_user: "%{name} さんが %{target} さんのパスワードをリセットしました"
         resolve_report: "%{name} さんがレポート %{target} を解決済みにしました"
+        restore_account: "%{name} さんが %{target} さんのアカウントを復旧しました"
         silence_account: "%{name} さんが %{target} さんをサイレンスにしました"
-        suspend_account: "%{name} さんが %{target} さんを停止しました"
         unsilence_account: "%{name} さんが %{target} さんのサイレンスを解除しました"
-        unsuspend_account: "%{name} さんが %{target} さんの停止を解除しました"
         update_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を更新しました"
         update_status: "%{name} さんが %{target} さんの投稿を更新しました"
       title: 操作履歴

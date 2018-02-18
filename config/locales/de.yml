@@ -91,7 +91,6 @@ de:
       moderation:
         all: Alle
         silenced: Stummgeschaltet
-        suspended: Gesperrt
         title: Moderation
       moderation_notes: Moderationsnotizen
       most_recent_activity: Letzte Aktivität

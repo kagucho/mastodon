@@ -91,7 +91,6 @@ sr-Latn:
       moderation:
         all: Svi
         silenced: Ućutkani
-        suspended: Suspendovani
         title: Moderacija
       moderation_notes: Moderatorske beleške
       most_recent_activity: Najskorija aktivnost

@@ -43,7 +43,6 @@ zh-TW:
       moderation:
         all: 全部
         silenced: 靜音
-        suspended: 停權
         title: 版務
       most_recent_activity: 最近活動
       most_recent_ip: 最近 IP

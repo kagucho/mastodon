@@ -91,7 +91,6 @@ pl:
       moderation:
         all: Wszystkie
         silenced: Wyciszone
-        suspended: Zawieszone
         title: Moderacja
       moderation_notes: Notatki moderacyjne
       most_recent_activity: Najnowsza aktywność

@@ -91,7 +91,6 @@ oc:
       moderation:
         all: Tot
         silenced: Rescondut
-        suspended: Suspendut
         title: Moderacion
       moderation_notes: Nòtas de moderacion
       most_recent_activity: Activitat mai recenta

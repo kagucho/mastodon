@@ -41,7 +41,10 @@ class ActivityPub::ProcessAccountService < BaseService
     @account.username    = @username
     @account.domain      = @domain
     @account.uri         = @uri
-    @account.suspended   = true if auto_suspend?
+    if auto_halt?
+      @account.halted    = true
+      @account.suspended = true
+    end
     @account.silenced    = true if auto_silence?
     @account.private_key = nil
   end
@@ -157,8 +160,8 @@ class ActivityPub::ProcessAccountService < BaseService
     @account.suspended? || domain_block&.reject_media?
   end
 
-  def auto_suspend?
-    domain_block&.suspend?
+  def auto_halt?
+    domain_block&.halt?
   end
 
   def auto_silence?

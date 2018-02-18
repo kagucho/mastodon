@@ -8,62 +8,31 @@ class SuspendAccountService < BaseService
     purge_user!
     purge_profile!
     purge_content!
-    unsubscribe_push_subscribers!
   end
 
   private
 
   def purge_user!
-    if @options[:remove_user]
-      @account.user&.destroy
-    else
-      @account.user&.disable!
-    end
+    @account.user&.disable!
   end
 
   def purge_content!
-    ActivityPub::RawDistributionWorker.perform_async(delete_actor_json, @account.id) if @account.local?
-
     @account.statuses.reorder(nil).find_in_batches do |statuses|
-      BatchedRemoveStatusService.new.call(statuses)
+      BatchedRemoveAccountStatusService.new.call(statuses)
     end
 
-    [
-      @account.media_attachments,
-      @account.stream_entries,
-      @account.notifications,
-      @account.favourites,
-      @account.active_relationships,
-      @account.passive_relationships,
-    ].each do |association|
-      destroy_all(association)
+    NotificationWorker.push_bulk(@account.favourites) do |favourite|
+      next if favourite.status.local?
+      [build_unfavourite_xml(favourite), favourite.account_id, favourite.status.account_id]
     end
   end
 
   def purge_profile!
-    @account.suspended    = true
-    @account.display_name = ''
-    @account.note         = ''
-    @account.avatar.destroy
-    @account.header.destroy
+    @account.hidden = true
     @account.save!
   end
 
-  def unsubscribe_push_subscribers!
-    destroy_all(@account.subscriptions)
-  end
-
-  def destroy_all(association)
-    association.in_batches.destroy_all
-  end
-
-  def delete_actor_json
-    payload = ActiveModelSerializers::SerializableResource.new(
-      @account,
-      serializer: ActivityPub::DeleteActorSerializer,
-      adapter: ActivityPub::Adapter
-    ).as_json
-
-    Oj.dump(ActivityPub::LinkedDataSignature.new(payload).sign!(@account))
+  def build_unfavourite_xml
+    OStatus::AtomSerializer.render(OStatus::AtomSerializer.new.unfavourite_salmon(favourite))
   end
 end

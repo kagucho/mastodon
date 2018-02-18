@@ -1,40 +1,55 @@
 # frozen_string_literal: true
 
-class BatchedRemoveStatusService < BaseService
+class BatchedRemoveAccountStatusService < BaseService
   include StreamEntryRenderer
 
-  # Delete given statuses and reblogs of them
+  # Propagates account removal to the given statuses and reblogs of them
   # Dispatch PuSH updates of the deleted statuses, but only local ones
   # Dispatch Salmon deletes, unique per domain, of the deleted statuses, but only local ones
   # Remove statuses from home feeds
   # Push delete events to streaming API for home feeds and public feeds
+  # @param Account  account  An account removed
   # @param [Status] statuses A preferably batched array of statuses
-  def call(statuses)
-    statuses = Status.where(id: statuses.map(&:id)).includes(:account, :stream_entry).flat_map { |status| [status] + status.reblogs.includes(:account, :stream_entry).to_a }
+  def call(account, statuses)
+    statuses = Status.where(id: statuses.map(&:id)).includes(:account, :stream_entry)
+    reblogs = statuses.flat_map { |status| status.reblogs.includes(:account, :stream_entry).to_a }
+    statuses_and_reblogs = statuses + reblogs
 
-    @mentions = statuses.map { |s| [s.id, s.mentions.includes(:account).to_a] }.to_h
-    @tags     = statuses.map { |s| [s.id, s.tags.pluck(:name)] }.to_h
+    @mentions = statuses_and_reblogs.map { |s| [s.id, s.mentions.includes(:account).to_a] }.to_h
+    @tags     = statuses_and_reblogs.map { |s| [s.id, s.tags.pluck(:name)] }.to_h
 
     @stream_entry_batches  = []
     @salmon_batches        = []
-    @json_payloads         = statuses.map { |s| [s.id, Oj.dump(event: :delete, payload: s.id.to_s)] }.to_h
+    @json_payloads         = statuses_and_reblogs.map { |s| [s.id, Oj.dump(event: :delete, payload: s.id.to_s)] }.to_h
     @activity_xml          = {}
 
-    # Ensure that rendered XML reflects destroyed state
-    statuses.each(&:destroy)
+    if account.terminated?
+      statuses_and_reblogs.each(&:destroy)
+    else
+      statuses.each do |status|
+        status.favourites
+              .includes(:account)
+              .references(:account)
+              .where
+              .not(account: account)
+              .destroy_all
+      end
+
+      reblogs.each { |reblog| reblog.destroy if reblog.account_id != account.id }
+    end
 
     # Batch by source account
-    statuses.group_by(&:account_id).each_value do |account_statuses|
-      account = account_statuses.first.account
+    statuses_and_reblogs.group_by(&:account_id).each_value do |account_statuses|
+      source_account = account_statuses.first.account
 
-      unpush_from_home_timelines(account, account_statuses)
-      unpush_from_list_timelines(account, account_statuses)
+      unpush_from_home_timelines(source_account, account_statuses)
+      unpush_from_list_timelines(source_account, account_statuses)
 
-      batch_stream_entries(account, account_statuses) if account.local?
+      batch_stream_entries(source_account, account_statuses) if source_account.local?
     end
 
     # Cannot be batched
-    statuses.each do |status|
+    statuses_and_reblogs.each do |status|
       unpush_from_public_timelines(status)
       batch_salmon_slaps(status) if status.local?
     end

@@ -7,7 +7,7 @@
   %td
     - if account.local?
       - if account.user.nil?
-        = t("admin.accounts.moderation.suspended")
+        = t("admin.accounts.moderation.halted")
       - else
         = t("admin.accounts.roles.#{account.user.role}")
     - else

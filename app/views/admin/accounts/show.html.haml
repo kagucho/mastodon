@@ -19,7 +19,7 @@
           %th= t('admin.accounts.role')
           %td
             - if @account.user.nil?
-              = t("admin.accounts.moderation.suspended")
+              = t("admin.accounts.moderation.halted")
             - else
               = t("admin.accounts.roles.#{@account.user&.role}")
             = table_link_to 'angle-double-up', t('admin.accounts.promote'), promote_admin_account_role_path(@account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') } if can?(:promote, @account.user)
@@ -102,10 +102,10 @@
       - unless @account.user_confirmed?
         = link_to t('admin.accounts.confirm'), admin_account_confirmation_path(@account.id), method: :post, class: 'button' if can?(:confirm, @account.user)
 
-    - if @account.suspended?
-      = link_to t('admin.accounts.undo_suspension'), admin_account_suspension_path(@account.id), method: :delete, class: 'button' if can?(:unsuspend, @account)
+    - if @account.halted?
+      = link_to t('admin.accounts.undo_halt'), admin_account_halt_path(@account.id), method: :delete, class: 'button' if can?(:restore, @account)
     - else
-      = link_to t('admin.accounts.perform_full_suspension'), admin_account_suspension_path(@account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') }, class: 'button' if can?(:suspend, @account)
+      = link_to t('admin.accounts.perform_full_halt'), admin_account_halt_path(@account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') }, class: 'button' if can?(:halt, @account)
 
 - if !@account.local? && @account.hub_url.present?
   %hr

@@ -46,7 +46,6 @@ th:
       moderation:
         all: ทั้งหมด
         silenced: ปิดเสียง
-        suspended: หยุดไว้
         title: Moderation
       most_recent_activity: กิจกรรมล่าสุด
       most_recent_ip: IP ล่าสุด

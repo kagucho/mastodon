@@ -31,8 +31,8 @@ class AccountFilter
       Account.silenced
     when 'recent'
       Account.recent
-    when 'suspended'
-      Account.suspended
+    when 'halted'
+      Account.halted
     when 'username'
       Account.matches_username(value)
     when 'display_name'

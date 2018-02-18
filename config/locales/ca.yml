@@ -91,7 +91,6 @@ ca:
       moderation:
         all: Tot
         silenced: Silenciat
-        suspended: Suspès
         title: Moderació
       moderation_notes: Notes de moderació
       most_recent_activity: Activitat més recent

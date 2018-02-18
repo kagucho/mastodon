@@ -91,7 +91,6 @@
       moderation:
         all: Alle
         silenced: Målbundet
-        suspended: Utvist
         title: Moderasjon
       moderation_notes: Moderasjonsnotater
       most_recent_activity: Nyligste aktivitet

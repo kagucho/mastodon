@@ -22,6 +22,6 @@ class UnblockDomainService < BaseService
   end
 
   def domain_block_impact
-    domain_block.silence? ? :silenced : :suspended
+    domain_block.silence? ? :silenced : :halted
   end
 end

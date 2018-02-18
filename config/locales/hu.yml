@@ -91,7 +91,6 @@ hu:
       moderation:
         all: Összes
         silenced: Némítva
-        suspended: Felfüggesztve
         title: Moderáció
       moderation_notes: Moderációs bejegyzés
       most_recent_activity: Legutóbbi tevékenységek

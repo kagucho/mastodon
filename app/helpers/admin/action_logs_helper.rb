@@ -80,13 +80,13 @@ module Admin::ActionLogsHelper
 
   def class_for_log_icon(log)
     case log.action
-    when :enable, :unsuspend, :unsilence, :confirm, :promote, :resolve
+    when :enable, :restore, :unsilence, :confirm, :promote, :resolve
       'positive'
     when :create
       opposite_verbs?(log) ? 'negative' : 'positive'
     when :update, :reset_password, :disable_2fa, :memorialize
       'neutral'
-    when :demote, :silence, :disable, :suspend
+    when :demote, :silence, :disable, :halt
       'negative'
     when :destroy
       opposite_verbs?(log) ? 'positive' : 'negative'

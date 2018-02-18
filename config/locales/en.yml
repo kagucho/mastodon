@@ -90,8 +90,8 @@ en:
       memorialize: Turn into memoriam
       moderation:
         all: All
+        halted: Halted
         silenced: Silenced
-        suspended: Suspended
         title: Moderation
       moderation_notes: Moderation notes
       most_recent_activity: Most recent activity
@@ -102,7 +102,7 @@ en:
         most_recent: Most recent
         title: Order
       outbox_url: Outbox URL
-      perform_full_suspension: Perform full suspension
+      perform_full_halt: Perform full halt
       profile_url: Profile URL
       promote: Promote
       protocol: Protocol
@@ -129,8 +129,8 @@ en:
       statuses: Statuses
       subscribe: Subscribe
       title: Accounts
+      undo_halt: Undo halt
       undo_silenced: Undo silence
-      undo_suspension: Undo suspension
       unsubscribe: Unsubscribe
       username: Username
       web: Web
@@ -149,14 +149,14 @@ en:
         disable_user: "%{name} disabled login for user %{target}"
         enable_custom_emoji: "%{name} enabled emoji %{target}"
         enable_user: "%{name} enabled login for user %{target}"
+        halted_account: "%{name} halted %{target}'s account"
         memorialize_account: "%{name} turned %{target}'s account into a memoriam page"
         promote_user: "%{name} promoted user %{target}"
         reset_password_user: "%{name} reset password of user %{target}"
         resolve_report: "%{name} dismissed report %{target}"
+        rstore_account: "%{name} restored %{target}'s account"
         silence_account: "%{name} silenced %{target}'s account"
-        suspend_account: "%{name} suspended %{target}'s account"
         unsilence_account: "%{name} unsilenced %{target}'s account"
-        unsuspend_account: "%{name} unsuspended %{target}'s account"
         update_custom_emoji: "%{name} updated emoji %{target}"
         update_status: "%{name} updated status by %{target}"
       title: Audit log
@@ -200,7 +200,7 @@ en:
           suspend: Suspend
         title: New domain block
       reject_media: Reject media files
-      reject_media_hint: Removes locally stored media files and refuses to download any in the future. Irrelevant for suspensions
+      reject_media_hint: Removes locally stored media files and refuses to download any in the future. Irrelevant for halts
       severities:
         noop: None
         silence: Silence

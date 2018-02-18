@@ -91,7 +91,6 @@ fr:
       moderation:
         all: Tous
         silenced: Masqués
-        suspended: Suspendus
         title: Modération
       moderation_notes: Notes de modération
       most_recent_activity: Dernière activité

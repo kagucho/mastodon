@@ -27,10 +27,10 @@ module Admin
       when 'resolve'
         @report.update!(action_taken_by_current_attributes)
         log_action :resolve, @report
-      when 'suspend'
-        Admin::SuspensionWorker.perform_async(@report.target_account.id)
+      when 'halt'
+        Admin::HaltWorker.perform_async(@report.target_account.id)
         log_action :resolve, @report
-        log_action :suspend, @report.target_account
+        log_action :halt, @report.target_account
         resolve_all_target_account_reports
       when 'silence'
         @report.target_account.update!(silenced: true)

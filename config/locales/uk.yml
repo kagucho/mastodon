@@ -43,7 +43,6 @@ uk:
       moderation:
         all: Усі
         silenced: Заглушені
-        suspended: Заблоковані
         title: Модерація
       most_recent_activity: Остання активність
       most_recent_ip: Останній IP

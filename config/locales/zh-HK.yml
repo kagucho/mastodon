@@ -46,7 +46,6 @@ zh-HK:
       moderation:
         all: 全部
         silenced: 被靜音的
-        suspended: 被停權的
         title: 管理操作
       most_recent_activity: 最新活動
       most_recent_ip: 最新 IP 位域

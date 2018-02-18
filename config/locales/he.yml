@@ -91,7 +91,6 @@ he:
       moderation:
         all: הכל
         silenced: מושתקים
-        suspended: מושהים
         title: ניהול קהילה
       moderation_notes: הודעות מנחה
       most_recent_activity: פעילות עדכנית

@@ -14,8 +14,8 @@ class BlockDomainService < BaseService
     clear_media! if domain_block.reject_media?
     if domain_block.silence?
       silence_accounts!
-    elsif domain_block.suspend?
-      suspend_accounts!
+    elsif domain_block.halt?
+      halt_accounts!
     end
   end
 
@@ -29,10 +29,10 @@ class BlockDomainService < BaseService
     clear_emojos
   end
 
-  def suspend_accounts!
-    blocked_domain_accounts.where(suspended: false).find_each do |account|
+  def halt_accounts!
+    blocked_domain_accounts.where(halted: false).find_each do |account|
       UnsubscribeService.new.call(account) if account.subscribed?
-      SuspendAccountService.new.call(account)
+      HaltAccountService.new.call(account)
     end
   end
 

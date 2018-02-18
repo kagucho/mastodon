@@ -91,7 +91,6 @@ sk:
       moderation:
         all: Všetko
         silenced: Umlčané
-        suspended: Suspendované
         title: Moderácia
       moderation_notes: Moderátorské poznámky
       most_recent_activity: Posledná aktivita

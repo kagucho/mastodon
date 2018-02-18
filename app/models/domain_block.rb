@@ -12,7 +12,7 @@
 #
 
 class DomainBlock < ApplicationRecord
-  enum severity: [:silence, :suspend, :noop]
+  enum severity: [:silence, :halt, :noop]
 
   attr_accessor :retroactive
 
@@ -22,7 +22,7 @@ class DomainBlock < ApplicationRecord
   delegate :count, to: :accounts, prefix: true
 
   def self.blocked?(domain)
-    where(domain: domain, severity: :suspend).exists?
+    where(domain: domain, severity: :halt).exists?
   end
 
   before_validation :normalize_domain

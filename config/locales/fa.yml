@@ -91,7 +91,6 @@ fa:
       moderation:
         all: همه
         silenced: بی‌صدا شده
-        suspended: معلق شده
         title: مدیریت
       moderation_notes: یادداشت مدیر
       most_recent_activity: آخرین فعالیت‌ها

@@ -45,7 +45,6 @@ id:
       moderation:
         all: Semua
         silenced: Didiamkan
-        suspended: Disuspen
         title: Moderasi
       most_recent_activity: Aktivitas terbaru
       most_recent_ip: IP terbaru

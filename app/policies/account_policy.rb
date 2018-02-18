@@ -9,11 +9,11 @@ class AccountPolicy < ApplicationPolicy
     staff?
   end
 
-  def suspend?
+  def halt?
     staff? && !record.user&.staff?
   end
 
-  def unsuspend?
+  def restore?
     staff?
   end
 

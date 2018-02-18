@@ -91,7 +91,6 @@ pt-BR:
       moderation:
         all: Todos
         silenced: Silenciados
-        suspended: Suspensos
         title: Moderação
       moderation_notes: Notas de moderação
       most_recent_activity: Atividade mais recente

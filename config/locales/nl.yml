@@ -91,7 +91,6 @@ nl:
       moderation:
         all: Alles
         silenced: Genegeerd
-        suspended: Opgeschort
         title: Moderatie
       moderation_notes: Opmerkingen voor moderatoren
       most_recent_activity: Laatst actief

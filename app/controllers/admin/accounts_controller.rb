@@ -85,7 +85,7 @@ module Admin
         :by_domain,
         :silenced,
         :recent,
-        :suspended,
+        :halted,
         :username,
         :display_name,
         :email,

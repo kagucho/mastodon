@@ -12,7 +12,7 @@ class ActivityPub::Activity::Delete < ActivityPub::Activity
   private
 
   def delete_person
-    SuspendAccountService.new.call(@account)
+    HaltAccountService.new.call(@account)
     @account.destroy!
   end
 

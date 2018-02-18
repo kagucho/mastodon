@@ -43,6 +43,7 @@
 #  protocol                :integer          default("ostatus"), not null
 #  memorial                :boolean          default(FALSE), not null
 #  moved_to_account_id     :integer
+#  halted                  :boolean          default(FALSE), not null
 #
 
 class Account < ApplicationRecord
@@ -71,6 +72,8 @@ class Account < ApplicationRecord
   validates_with UnreservedUsernameValidator, if: -> { local? && will_save_change_to_username? }
   validates :display_name, length: { maximum: 30 }, if: -> { local? && will_save_change_to_display_name? }
   validates :note, length: { maximum: 160 }, if: -> { local? && will_save_change_to_note? }
+
+  validates_with AccountSuspensionValidator
 
   # Timelines
   has_many :stream_entries, inverse_of: :account, dependent: :destroy
@@ -111,7 +114,7 @@ class Account < ApplicationRecord
   scope :expiring, ->(time) { remote.where.not(subscription_expires_at: nil).where('subscription_expires_at < ?', time) }
   scope :partitioned, -> { order('row_number() over (partition by domain)') }
   scope :silenced, -> { where(silenced: true) }
-  scope :suspended, -> { where(suspended: true) }
+  scope :halted, -> { where(halted: true) }
   scope :recent, -> { reorder(id: :desc) }
   scope :alphabetic, -> { order(domain: :asc, username: :asc) }
   scope :by_domain_accounts, -> { group(:domain).select(:domain, 'COUNT(*) AS accounts_count').order('accounts_count desc') }
@@ -164,6 +167,13 @@ class Account < ApplicationRecord
   def refresh!
     return if local?
     ResolveAccountService.new.call(acct)
+  end
+
+  def restore!
+    transaction do
+      user&.enable! if local?
+      update!(halted: false, suspended: false)
+    end
   end
 
   def unsuspend!
