@@ -10,7 +10,7 @@ function openWebCache() {
 }
 
 function fetchRoot() {
-  return fetch('/', { credentials: 'include' });
+  return fetch('/', { credentials: 'include', redirect: 'manual' });
 }
 
 // Cause a new version of a registered Service Worker to replace an existing one
