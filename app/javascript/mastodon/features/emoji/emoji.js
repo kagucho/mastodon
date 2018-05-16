@@ -4,8 +4,6 @@ import Trie from 'substring-trie';
 
 const trie = new Trie(Object.keys(unicodeMapping));
 
-const assetHost = process.env.CDN_HOST || '';
-
 const emojify = (str, customEmojis = {}) => {
   const tagCharsWithoutEmojis = '<&';
   const tagCharsWithEmojis = Object.keys(customEmojis).length ? '<&:' : '<&';
@@ -60,7 +58,7 @@ const emojify = (str, customEmojis = {}) => {
     } else { // matched to unicode emoji
       const { filename, shortCode } = unicodeMapping[match];
       const title = shortCode ? `:${shortCode}:` : '';
-      replacement = `<img draggable="false" class="emojione" alt="${match}" title="${title}" src="${assetHost}/emoji/${filename}.svg" />`;
+      replacement = `<img draggable="false" class="emojione" alt="${match}" title="${title}" src="${__webpack_public_path__}/emoji/${filename}.svg" />`;
       rend = i + match.length;
     }
     rtn += str.slice(0, i) + replacement;

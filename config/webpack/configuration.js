@@ -16,18 +16,17 @@ function removeOuterSlashes(string) {
   return string.replace(/^\/*/, '').replace(/\/*$/, '');
 }
 
-function formatPublicPath(host = '', path = '') {
+function formatPublicPath(host = '') {
   let formattedHost = removeOuterSlashes(host);
   if (formattedHost && !/^http/i.test(formattedHost)) {
     formattedHost = `//${formattedHost}`;
   }
-  const formattedPath = removeOuterSlashes(path);
-  return `${formattedHost}/${formattedPath}/`;
+  return `${formattedHost}/`;
 }
 
 const output = {
-  path: resolve('public', settings.public_output_path),
-  publicPath: formatPublicPath(env.CDN_HOST, settings.public_output_path),
+  path: resolve('public'),
+  publicPath: formatPublicPath(env.CDN_HOST),
 };
 
 module.exports = {

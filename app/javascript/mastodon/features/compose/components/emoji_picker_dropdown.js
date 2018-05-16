@@ -25,10 +25,9 @@ const messages = defineMessages({
   flags: { id: 'emoji_button.flags', defaultMessage: 'Flags' },
 });
 
-const assetHost = process.env.CDN_HOST || '';
 let EmojiPicker, Emoji; // load asynchronously
 
-const backgroundImageFn = () => `${assetHost}/emoji/sheet.png`;
+const backgroundImageFn = () => `${__webpack_public_path__}/emoji/sheet.png`;
 const listenerOptions = detectPassiveEvents.hasSupport ? { passive: true } : false;
 
 const categoriesSort = [
@@ -357,7 +356,7 @@ export default class EmojiPickerDropdown extends React.PureComponent {
           <img
             className={classNames('emojione', { 'pulse-loading': active && loading })}
             alt='🙂'
-            src={`${assetHost}/emoji/1f602.svg`}
+            src={`${__webpack_public_path__}/emoji/1f602.svg`}
           />
         </div>
 

@@ -6,7 +6,7 @@ const { sync } = require('glob');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const extname = require('path-complete-extname');
-const { env, settings, themes, output, loadersDir } = require('./configuration.js');
+const { settings, themes, output, loadersDir } = require('./configuration.js');
 const localePackPaths = require('./generateLocalePacks');
 
 const extensionGlob = `**/*{${settings.extensions.join(',')}}*`;
@@ -44,7 +44,6 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(env))),
     new webpack.NormalModuleReplacementPlugin(
       /^history\//, (resource) => {
         // temporary fix for https://github.com/ReactTraining/react-router/issues/5576
@@ -52,7 +51,7 @@ module.exports = {
         resource.request = resource.request.replace(/^history/, 'history/es');
       }
     ),
-    new ExtractTextPlugin(env.NODE_ENV === 'production' ? '[name]-[contenthash].css' : '[name].css'),
+    new ExtractTextPlugin(process.env.NODE_ENV === 'production' ? '[name]-[contenthash].css' : '[name].css'),
     new ManifestPlugin({
       publicPath: output.publicPath,
       writeToFileEmit: true,

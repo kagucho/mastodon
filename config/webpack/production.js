@@ -3,6 +3,7 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CompressionPlugin = require('compression-webpack-plugin');
+const { settings } = require('./configuration.js');
 const sharedConfig = require('./shared.js');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const OfflinePlugin = require('offline-plugin');
@@ -21,8 +22,8 @@ try {
 
 module.exports = merge(sharedConfig, {
   output: {
-    filename: '[name]-[chunkhash].js',
-    chunkFilename: '[name]-[chunkhash].js',
+    filename: path.join(settings.public_output_path, '[name]-[chunkhash].js'),
+    chunkFilename: path.join(settings.public_output_path, '[name]-[chunkhash].js'),
   },
 
   devtool: 'source-map', // separate sourcemap file, suitable for production
