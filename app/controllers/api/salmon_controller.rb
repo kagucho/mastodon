@@ -7,6 +7,7 @@ class Api::SalmonController < Api::BaseController
   respond_to :txt
 
   def update
+    $nekomanma_pp = false
     if verify_payload?
       process_salmon
       head 202

@@ -6,6 +6,9 @@ class Api::BaseController < ApplicationController
 
   include RateLimitHeaders
 
+  before_action :nekomanma_enable_pp
+  after_action :nekomanma_disable_pp
+
   skip_before_action :store_current_location
   protect_from_forgery with: :null_session
 
@@ -81,5 +84,13 @@ class Api::BaseController < ApplicationController
 
   def authorize_if_got_token!(*scopes)
     doorkeeper_authorize!(*scopes) if doorkeeper_token
+  end
+
+  def nekomanma_enable_pp
+    $nekomanma_pp = true
+  end
+
+  def nekomanma_disable_pp
+    $nekomanma_pp = false
   end
 end

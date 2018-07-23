@@ -4,6 +4,7 @@ class Api::PushController < Api::BaseController
   include SignatureVerification
 
   def update
+    $nekomanma_pp = false
     response, status = process_push_request
     render plain: response, status: status
   end
